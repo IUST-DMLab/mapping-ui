@@ -5,7 +5,7 @@
     <title>Knowledge Graph - Property Mapping UI</title>
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="../node_modules/angular-ui-bootstrap/dist/ui-bootstrap-csp.css">
-    <link rel="stylesheet" href="../styles/main.css">
+
     <script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
     <script type="text/javascript" src="../node_modules/angular/angular.min.js"></script>
@@ -26,29 +26,54 @@
     <script type="text/javascript" src="../scripts/app/app.js"></script>
     <script type="text/javascript" src="../scripts/app/service/rest.js"></script>
     <script type="text/javascript" src="../scripts/app/controller/main.js"></script>
+
+    <link rel="stylesheet" href="../styles/main.css">
 </head>
 
 <body ng-controller="PropertyMappingController">
+
 <div ng-if="data" class="container">
     <br/>
 
     <div class="text-center">
         <form class="form-inline">
             <label>Search</label>
-            <input type="text" class="input" ng-model="filter.search" placeholder="Search"/>
+            <input type="text" class="input" ng-model="filter.templateName" placeholder="Template Name"/>
+            <input type="text" class="input" ng-model="filter.ontologyClass" placeholder="Ontology Class"/>
+            <input type="text" class="input" ng-model="filter.templateProperty" placeholder="Template Property"/>
+            <input type="text" class="input" ng-model="filter.ontologyProperty" placeholder="Ontology Property"/>
+
+
+            <select ng-model="filter.status" ng-options="s for s in statusList">
+                <option value="" selected="selected" label="(Status)"></option>
+            </select>
+
             <label><input type="checkbox" class="input-small" ng-model="filter.approved">Approved</label>
-            <label><input type="checkbox" class="input-small" ng-model="filter.hasFarsi">Has Farsi</label>
-            <button class="btn btn-success" ng-click="go(0, filter.search, filter.approved, filter.hasFarsi)">Go
+
+            <button class="btn btn-success" ng-click="go(0)">Go
             </button>
-            <button class="btn btn-warning" ng-click="go(0)">Clear</button>
+            <button class="btn btn-warning" ng-click="clear()">Clear</button>
         </form>
-        <div paging
-             page="data.pageNo"
-             page-size="data.pageSize"
-             total="data.rowCount"
-             paging-action="go(page-1)">
-        </div>
+
     </div>
+
+    <table style="width: 600px; margin:0 auto;">
+        <tr>
+            <td>
+                <div paging
+                     page="data.pageNo"
+                     page-size="data.pageSize"
+                     total="data.rowCount"
+                     paging-action="go(page-1)">
+                </div>
+            </td>
+            <td>
+                <strong>
+                    total items : {{data.rowCount}}
+                </strong>
+            </td>
+        </tr>
+    </table>
 
     <table class="table" ng-if="data">
         <thead>
@@ -59,6 +84,7 @@
             <th>Ontology Class</th>
             <th>Template Property</th>
             <th>Ontology Property</th>
+            <th>Tuple Count</th>
             <th>Status</th>
             <th>Approved</th>
             <th>Edit</th>
@@ -88,6 +114,9 @@
                        auto-complete="autoCompleteOptions"
                        class="editing"/>
                 <!--<input ng-if='editing[$index]' ng-value="a.ontologyClass" ng-model="edit[$index].ontologyClass">-->
+            </td>
+            <td>
+                <span>{{a.tupleCount}}</span>
             </td>
             <td>
                 <span ng-if='!editing[$index]'>{{a.status}}</span>
