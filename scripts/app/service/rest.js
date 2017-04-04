@@ -1,6 +1,6 @@
 app.service('RestService', ['$http', function ($http) {
     //var baseURl = 'http://localhost:8090/';
-    var baseURl = 'http://194.225.227.161:8090/';
+    var baseURl = 'http://194.225.227.161/';
     var self = this;
     this.ingoing = 0;
 
@@ -101,7 +101,7 @@ app.service('RestService', ['$http', function ($http) {
         });
     };
 
-    this.templateMappingSearch = function (page, pageSize, name, like, approved, hasFarsi) {
+    this.templateMappingSearch = function (page, pageSize, templateName, className, like, approved) {
         var req = {
             method: 'GET',
             url: baseURl + 'templateMapping/rest/v1/search',
@@ -110,11 +110,10 @@ app.service('RestService', ['$http', function ($http) {
                 pageSize: pageSize
             }
         };
-        if (name != null) req.params.templateName = name;
-        if (name != null) req.params.className = name;
+        if (templateName) req.params.templateName = templateName;
+        if (className) req.params.className = className;
         if (like != null) req.params.like = like;
-        if (approved != null && approved) req.params.approved = approved;
-        if (hasFarsi != null && hasFarsi) req.params.language = "fa";
+        if (approved != null && approved != undefined) req.params.approved = approved;
         return http(req);
     };
 
@@ -165,7 +164,7 @@ app.service('RestService', ['$http', function ($http) {
         if (templateProperty) req.params.templateProperty = templateProperty;
         if (ontologyProperty) req.params.ontologyProperty = ontologyProperty;
 
-        if (approved != null && approved) req.params.approved = approved;
+        if (approved != null && approved != undefined) req.params.approved = approved;
         if (status) req.params.status = status;
 
         if (like != null) req.params.like = like;

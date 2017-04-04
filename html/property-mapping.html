@@ -43,15 +43,15 @@
             <input type="text" class="input" ng-model="filter.templateProperty" placeholder="Template Property"/>
             <input type="text" class="input" ng-model="filter.ontologyProperty" placeholder="Ontology Property"/>
 
-
             <select ng-model="filter.status" ng-options="s for s in statusList">
                 <option value="" selected="selected" label="(Status)"></option>
             </select>
 
-            <label><input type="checkbox" class="input-small" ng-model="filter.approved">Approved</label>
+            <select ng-model="filter.approved" ng-options="s for s in [true, false]">
+                <option value="" selected="selected" label="(Approved)"></option>
+            </select>
 
-            <button class="btn btn-success" ng-click="go(0)">Go
-            </button>
+            <button class="btn btn-success" ng-click="go(0)">Go</button>
             <button class="btn btn-warning" ng-click="clear()">Clear</button>
         </form>
 

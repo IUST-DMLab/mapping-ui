@@ -46,13 +46,14 @@ app.controller('MainController', function ($scope, $timeout, RestService) {
 
 
 app.controller('TemplateMappingController', function ($scope, $timeout, RestService) {
+    $scope.filter = {};
     $scope.go = go;
     $scope.save = save;
     $scope.revert = revert;
-
-    //$scope.loadClasses = function (query) {
-    //    return RestService.ontologyClassSearch(0, 100, query);
-    //};
+    $scope.clear = function(){
+        $scope.filter = {};
+        $scope.go(0);
+    };
 
     $scope.autoCompleteOptions = {
         minimumChars: 1,
@@ -65,18 +66,12 @@ app.controller('TemplateMappingController', function ($scope, $timeout, RestServ
         go(0);
     }, 500);
 
-    function go(page, search, approved, hasFarsi) {
-        $scope.filter = {
-            page: page,
-            search: search,
-            approved: approved,
-            hasFarsi: hasFarsi
-        };
-        RestService.templateMappingSearch($scope.filter.page, 40, $scope.filter.search, true, $scope.filter.approved, $scope.filter.hasFarsi)
+    function go(page) {
+        RestService.templateMappingSearch(page, 40, $scope.filter.templateName, $scope.filter.ontologyClass, true, $scope.filter.approved)
             .success(function (data) {
+                $scope.copy = angular.copy(data);
                 $scope.data = data;
-                $scope.pages = [];
-                for (var i = 0; i < data.pageCount; i++) $scope.pages.push(i + 1);
+                $scope.data.pageNo = $scope.data.page + 1;
             });
     }
 
@@ -94,11 +89,10 @@ app.controller('TemplateMappingController', function ($scope, $timeout, RestServ
 
 
 app.controller('PropertyMappingController', function ($scope, $timeout, RestService) {
+    $scope.filter = {};
     $scope.go = go;
     $scope.save = save;
     $scope.revert = revert;
-    $scope.filter = {};
-
     $scope.clear = function(){
         $scope.filter = {};
         $scope.go(0);

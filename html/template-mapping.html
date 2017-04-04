@@ -35,18 +35,37 @@
     <div class="text-center">
         <form class="form-inline">
             <label>Search</label>
-            <input type="text" class="input" ng-model="filter.search" placeholder="Search"/>
-            <label><input type="checkbox" class="input-small" ng-model="filter.approved">Approved</label>
-            <label><input type="checkbox" class="input-small" ng-model="filter.hasFarsi">Has Farsi</label>
-            <button class="btn btn-success" ng-click="go(0, filter.search, filter.approved, filter.hasFarsi)">Go
-            </button>
-            <button class="btn btn-warning" ng-click="go(0)">Clear</button>
+            <input type="text" class="input" ng-model="filter.templateName" placeholder="Template Name"/>
+            <input type="text" class="input" ng-model="filter.ontologyClass" placeholder="Ontology Class"/>
+
+            <select ng-model="filter.approved" ng-options="s for s in [true, false]">
+                <option value="" selected="selected" label="(Approved)"></option>
+            </select>
+
+            <button class="btn btn-success" ng-click="go(0)">Go</button>
+            <button class="btn btn-warning" ng-click="clear()">Clear</button>
         </form>
-        <ul class="pagination">
-            <li ng-repeat="page in pages" ng-class="{'disabled': page - 1 == data.page}">
-                <a ng-click="go($index)">{{page}}</a></li>
-        </ul>
     </div>
+
+    <table style="width: 600px; margin:0 auto;">
+        <tr>
+            <td>
+                <div paging
+                     page="data.pageNo"
+                     page-size="data.pageSize"
+                     total="data.rowCount"
+                     paging-action="go(page-1)">
+                </div>
+            </td>
+            <td>
+                <strong>
+                    total items : {{data.rowCount}}
+                </strong>
+            </td>
+        </tr>
+    </table>
+
+
     <table class="table" ng-if="data">
         <thead>
         <tr>
