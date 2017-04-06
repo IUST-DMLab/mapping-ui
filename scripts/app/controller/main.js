@@ -105,7 +105,7 @@ app.controller('PropertyMappingController', function ($scope, $timeout, RestServ
         }
     };
 
-    $scope.statusList = ['Approved', 'NearlyApproved', 'NotApproved', 'Multiple', 'Translated', 'NotMapped'];
+    $scope.statusList = ['Mapped', 'NearlyMapped', 'NotApproved', 'Multiple', 'Translated', 'NotMapped'];
 
     $timeout(function () {
         go(0);
