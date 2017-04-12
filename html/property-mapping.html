@@ -11,6 +11,9 @@
     <script type="text/javascript" src="../node_modules/angular/angular.min.js"></script>
     <script type="text/javascript" src="../node_modules/angular-sanitize/angular-sanitize.js"></script>
 
+    <script type="text/javascript" src="../libs/jquery.growl/javascripts/jquery.growl.js"></script>
+    <link rel="stylesheet" type="text/css" href="../libs/jquery.growl/stylesheets/jquery.growl.css">
+
     <script type="text/javascript" src="../node_modules/ng-tags-input/build/ng-tags-input.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../node_modules/ng-tags-input/build/ng-tags-input.min.css">
 
@@ -57,7 +60,7 @@
 
     </div>
 
-    <table style="width: 600px; margin:0 auto;">
+    <table cellpadding="10" cellspacing="10" style="width: 670px; margin:0 auto;">
         <tr>
             <td>
                 <div paging
@@ -66,6 +69,13 @@
                      total="data.rowCount"
                      paging-action="go(page-1)">
                 </div>
+            </td>
+            <td>
+                <form ng-submit="go(data.searchPageNo-1)">
+                    <input placeholder="page"
+                           ng-model="data.searchPageNo"
+                           style="width: 50px; border:solid 1px #ddd; height: 35px;">
+                </form>
             </td>
             <td>
                 <strong>

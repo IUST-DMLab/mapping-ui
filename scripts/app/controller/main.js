@@ -50,7 +50,7 @@ app.controller('TemplateMappingController', function ($scope, $timeout, RestServ
     $scope.go = go;
     $scope.save = save;
     $scope.revert = revert;
-    $scope.clear = function(){
+    $scope.clear = function () {
         $scope.filter = {};
         $scope.go(0);
     };
@@ -67,11 +67,18 @@ app.controller('TemplateMappingController', function ($scope, $timeout, RestServ
     }, 500);
 
     function go(page) {
+
+        if (page < 0 || ($scope.data && page > $scope.data.pageCount)) {
+            $.growl.error({message: 'invalid page number !!!'});
+            return;
+        }
+
         RestService.templateMappingSearch(page, 40, $scope.filter.templateName, $scope.filter.ontologyClass, true, $scope.filter.approved)
             .success(function (data) {
                 $scope.copy = angular.copy(data);
                 $scope.data = data;
                 $scope.data.pageNo = $scope.data.page + 1;
+                $scope.data.searchPageNo = $scope.data.pageNo;
             });
     }
 
@@ -93,7 +100,7 @@ app.controller('PropertyMappingController', function ($scope, $timeout, RestServ
     $scope.go = go;
     $scope.save = save;
     $scope.revert = revert;
-    $scope.clear = function(){
+    $scope.clear = function () {
         $scope.filter = {};
         $scope.go(0);
     };
@@ -113,12 +120,18 @@ app.controller('PropertyMappingController', function ($scope, $timeout, RestServ
 
     function go(page) {
 
+        if (page < 0 || ($scope.data && page > $scope.data.pageCount)) {
+            $.growl.error({message: 'invalid page number !!!'});
+            return;
+        }
+
         RestService.propertyMappingSearch(page, 40, $scope.filter.templateName, $scope.filter.ontologyClass, $scope.filter.templateProperty,
             $scope.filter.ontologyProperty, true, $scope.filter.approved, $scope.filter.status)
             .success(function (data) {
                 $scope.copy = angular.copy(data);
                 $scope.data = data;
                 $scope.data.pageNo = $scope.data.page + 1;
+                $scope.data.searchPageNo = $scope.data.pageNo;
             });
     }
 
