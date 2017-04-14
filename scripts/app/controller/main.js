@@ -146,3 +146,107 @@ app.controller('PropertyMappingController', function ($scope, $timeout, RestServ
     }
 });
 
+
+app.controller('TriplesController', function ($scope, $timeout, RestService) {
+
+    $scope.filter = {};
+    $scope.go = go;
+    $scope.clear = function () {
+        $scope.filter = {};
+        $scope.go(0);
+    };
+
+    $timeout(function () {
+        go(0);
+    }, 500);
+
+    function go(page) {
+
+        if (page < 0 || ($scope.data && page > $scope.data.pageCount)) {
+            $.growl.error({message: 'invalid page number !!!'});
+            return;
+        }
+
+        RestService.triplesSearch(page, 40, $scope.filter.context, $scope.filter.subject, $scope.filter.predicate, $scope.filter.object)
+            .success(function (data) {
+                $scope.copy = angular.copy(data);
+                $scope.data = data;
+                $scope.data.pageNo = $scope.data.page + 1;
+                $scope.data.searchPageNo = $scope.data.pageNo;
+            });
+    }
+});
+
+
+app.controller('TripleController', function ($scope, $timeout, RestService) {
+    $scope.filter = {};
+    $scope.go = go;
+
+    $timeout(function () {
+        go(0);
+    }, 500);
+
+    function go() {
+        var subject = getParameterByName('subject');
+
+        RestService.tripleBySubject(subject)
+            .success(function (data) {
+                $scope.data = data;
+
+                var labelRow = $scope.data.data.filter(function (item) {
+                    return item.predicate.endsWith('label');
+                })[0];
+
+                $scope.data.pageTitle = labelRow ? labelRow.object.value : '***';
+            });
+    }
+
+    $scope.prefixesMapper = prefixesMapper;
+});
+
+
+function getParameterByName(name, url) {
+    if (!url) {
+        url = window.location.href;
+    }
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+
+
+function prefixesMapper(link) {
+    var prefixes = {
+        'dboeni': 'http://mappings.dbpedia.org/server/mappings/en/Infobox_',
+        'wkmen': 'http://en.wikipedia.org/wiki/Mapping_en',
+        'dbr': 'http://dbpedia.org/resource/',
+        'dbo': 'http://dbpedia.org/ontology/',
+        'rr': 'http://www.w3.org/ns/r2rml#',
+        'rml': 'http://semweb.mmlab.be/ns/rml#',
+        'ql': 'http://semweb.mmlab.be/ns/ql#',
+        'rdf': 'https://www.w3.org/1999/02/22-rdf-syntax-ns#',
+        'rdfs': 'http://www.w3.org/2000/01/rdf-schema#',
+        'skos': 'http://www.w3.org/2004/02/skos/core#',
+        'foaf': 'http://xmlns.com/foaf/0.1/',
+        'purl': 'http://purl.org/dc/elements/1.1/',
+        'purlt': 'http://purl.org/dc/terms/',
+        'owl': 'http://www.w3.org/2002/07/owl#',
+        'geo': 'http://www.w3.org/2003/01/geo/',
+        'dbpe': 'http://en.wikipedia.org/property/',
+        'dbp': 'http://fa.wikipedia.org/property/',
+        'wikifa': 'http://fa.wikipedia.org/wiki/',
+        'wikien': 'http://en.wikipedia.org/wiki/',
+        'fkg': 'http://fkg.iust.ac.ir/ontology/',
+        'wt': 'http://fa.wikipedia.org/wiki/template/'
+    };
+
+    for (var x in prefixes) {
+        var p = prefixes[x];
+        if (link.indexOf(p) !== -1)
+            return x + ':' + link.replace(p, '');
+    }
+
+}

@@ -190,4 +190,33 @@ app.service('RestService', ['$http', function ($http) {
         return http(req);
     };
 
+    /* Triples */
+
+    this.triplesSearch = function (page, pageSize, context, subject, predicate, object) {
+        var req = {
+            method: 'GET',
+            url: 'http://194.225.227.161:8091/rs/v1/triples/search?predicate=http://www.w3.org/2000/01/rdf-schema%23label',
+            params: {
+                page: page,
+                pageSize: pageSize
+            }
+        };
+
+        if (object) req.params.object = object;
+
+        return http(req);
+    };
+
+    this.tripleBySubject = function (subject) {
+        var req = {
+            method: 'GET',
+            url: 'http://194.225.227.161:8091/rs/v1/triples/search',
+            params: {
+                subject: subject
+            }
+        };
+
+        return http(req);
+    };
+
 }]);

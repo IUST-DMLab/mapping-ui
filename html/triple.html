@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html ng-app='kgui'>
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Knowledge Graph - Triple UI</title>
+    <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../node_modules/angular-ui-bootstrap/dist/ui-bootstrap-csp.css">
+
+    <script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script type="text/javascript" src="../node_modules/angular/angular.min.js"></script>
+    <script type="text/javascript" src="../node_modules/angular-sanitize/angular-sanitize.js"></script>
+
+    <script type="text/javascript" src="../libs/jquery.growl/javascripts/jquery.growl.js"></script>
+    <link rel="stylesheet" type="text/css" href="../libs/jquery.growl/stylesheets/jquery.growl.css">
+
+    <script type="text/javascript" src="../node_modules/ng-tags-input/build/ng-tags-input.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../node_modules/ng-tags-input/build/ng-tags-input.min.css">
+
+    <script type="text/javascript" src="../node_modules/underscore/underscore.js"></script>
+
+    <script type="text/javascript" src="../node_modules/angular-auto-complete/angular-auto-complete.js"></script>
+    <link rel="stylesheet" href="../node_modules/angular-auto-complete/angular-auto-complete.css"/>
+
+    <script type="text/javascript" src="../node_modules/angular-paging/dist/paging.min.js"></script>
+
+    <script type="text/javascript" src="../node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
+    <script type="text/javascript" src="../node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+    <script type="text/javascript" src="../scripts/app/app.js"></script>
+    <script type="text/javascript" src="../scripts/app/service/rest.js"></script>
+    <script type="text/javascript" src="../scripts/app/controller/main.js"></script>
+
+    <link rel="stylesheet" href="../styles/main.css">
+</head>
+
+<body ng-controller="TripleController">
+
+<div ng-if="data" class="container" style="direction: rtl;">
+    <br/>
+
+    <h1>
+        {{data.pageTitle}}
+    </h1>
+
+    <table class="table" ng-if="data">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>خصیصه</th>
+            <th>مقدار</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat='a in data.data'>
+            <td>{{(data.page * data.pageSize + $index)+1}}</td>
+            <td>
+                <a href="{{a.predicate}}">{{prefixesMapper(a.predicate)}}</a>
+            </td>
+            <td>
+                <span ng-if="a.object.type!='Resource'">{{a.object.value}}</span>
+                <a ng-if="a.object.type=='Resource'">{{a.object.value}}</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+
+</html>
