@@ -84,6 +84,15 @@ app.service('RestService', ['$http', function ($http) {
         return http(req);
     };
 
+    this.translate = function (keyword) {
+        var req = {
+            method: 'GET',
+            url: baseURl + 'translator/rest/v1/node/' + keyword
+        };
+        return http(req);
+    };
+
+
     /* Template Mapping */
 
     this.ontologyClassSearch = function (page, pageSize, keyword) {

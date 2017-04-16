@@ -193,11 +193,31 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
             .success(function (data) {
                 $scope.data = data;
 
-                var labelRow = $scope.data.data.filter(function (item) {
+                var titleRow = $scope.data.data.filter(function (item) {
                     return item.predicate.endsWith('label');
                 })[0];
 
-                $scope.data.pageTitle = labelRow ? labelRow.object.value : '***';
+                $scope.data.pageTitle = titleRow ? titleRow.object.value : '***';
+
+                /**/
+                var clazzRow = $scope.data.data.filter(function (item) {
+                    return item.predicate.endsWith('instanceOf');
+                })[0];
+
+                var clazz = clazzRow ? clazzRow.object.value || '' : undefined;
+
+                if (clazz) {
+                    clazz = clazz.split('/').pop();
+                    RestService.translate(clazz)
+                        .success(function (tr) {
+                            $scope.data.clazz = clazzRow ? tr.faLabel : '***';
+                        });
+                }
+
+                $scope.data.data = data.data.filter(function (x) {
+                    return !x.predicate.endsWith('label') && !x.predicate.endsWith('instanceOf');
+                });
+
             });
     }
 

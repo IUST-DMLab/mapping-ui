@@ -44,6 +44,10 @@
         {{data.pageTitle}}
     </h1>
 
+    <h4 style="color: gray;">
+        {{data.clazz}}
+    </h4>
+    <br>
     <table class="table" ng-if="data">
         <thead>
         <tr>
@@ -60,7 +64,7 @@
             </td>
             <td>
                 <span ng-if="a.object.type!='Resource'">{{a.object.value}}</span>
-                <a ng-if="a.object.type=='Resource'"  ng-href="{{a.object.value}}">{{a.object.value | mapPrefix}}</a>
+                <a ng-if="a.object.type=='Resource'" ng-href="{{a.object.value}}">{{a.object.value | mapPrefix}}</a>
             </td>
         </tr>
         </tbody>
