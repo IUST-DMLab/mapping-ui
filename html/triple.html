@@ -56,11 +56,11 @@
         <tr ng-repeat='a in data.data'>
             <td>{{(data.page * data.pageSize + $index)+1}}</td>
             <td>
-                <a href="{{a.predicate}}">{{prefixesMapper(a.predicate)}}</a>
+                <a href="{{a.predicate}}">{{a.predicate | mapPrefix}}</a>
             </td>
             <td>
                 <span ng-if="a.object.type!='Resource'">{{a.object.value}}</span>
-                <a ng-if="a.object.type=='Resource'">{{a.object.value}}</a>
+                <a ng-if="a.object.type=='Resource'"  ng-href="{{a.object.value}}">{{a.object.value | mapPrefix}}</a>
             </td>
         </tr>
         </tbody>
