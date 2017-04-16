@@ -92,6 +92,14 @@ app.service('RestService', ['$http', function ($http) {
         return http(req);
     };
 
+    this.getPrefixes = function(){
+        var req = {
+            method: 'GET',
+            url: 'http://194.225.227.161:8090/mapping/rest/v1/prefixes'
+        };
+
+        return http(req);
+    };
 
     /* Template Mapping */
 

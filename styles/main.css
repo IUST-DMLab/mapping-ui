@@ -68,6 +68,10 @@ td {
 .editing {
   border: solid 1px red;
 }
+.btn {
+  font-size: 12px;
+}
+/**/
 .loading {
   position: absolute;
   top: 10px;
@@ -86,4 +90,35 @@ td {
   border: solid 1px #ddad4e;
   box-shadow: 0 0 4px 0px #ddd;
   margin: 0 auto;
+}
+/**/
+#header {
+  direction: rtl;
+  margin: 0 0 10px 0;
+  height: 50px;
+  border-bottom: solid 1px #aaa;
+  box-shadow: 0 4px 5px -2px grey;
+  background: #93cede;
+  background: -moz-linear-gradient(45deg, #93cede 0%, #75bdd1 41%, #49a5bf 100%);
+  background: -webkit-gradient(left bottom, right top, color-stop(0%, #93cede), color-stop(41%, #75bdd1), color-stop(100%, #49a5bf));
+  background: -webkit-linear-gradient(45deg, #93cede 0%, #75bdd1 41%, #49a5bf 100%);
+  background: -o-linear-gradient(45deg, #93cede 0%, #75bdd1 41%, #49a5bf 100%);
+  background: -ms-linear-gradient(45deg, #93cede 0%, #75bdd1 41%, #49a5bf 100%);
+  background: linear-gradient(45deg, #93cede 0%, #75bdd1 41%, #49a5bf 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#93cede', endColorstr='#49a5bf', GradientType=1);
+}
+#header .title {
+  color: white;
+  font-size: 15pt;
+  font-weight: bold;
+  float: right;
+  padding: 10px 50px;
+}
+#footer {
+  direction: rtl;
+  background-color: #e6e6e6;
+  margin: 20px 0 0 0;
+  padding: 10px 50px;
+  text-align: center;
+  border-top: solid 1px #aaa;
 }

@@ -214,9 +214,9 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                         });
                 }
 
-                $scope.data.data = data.data.filter(function (x) {
-                    return !x.predicate.endsWith('label') && !x.predicate.endsWith('instanceOf');
-                });
+                //$scope.data.data = data.data.filter(function (x) {
+                //    return !x.predicate.endsWith('label') && !x.predicate.endsWith('instanceOf');
+                //});
 
             });
     }

@@ -36,10 +36,9 @@
 </head>
 
 <body ng-controller="TripleController">
+<div ng-include="'templates/header.html'"></div>
 
-<div ng-if="data" class="container" style="direction: rtl;">
-    <br/>
-
+<div ng-if="data" class="container" style="direction: rtl; min-height: 450px;">
     <h1>
         {{data.pageTitle}}
     </h1>
@@ -57,12 +56,12 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat='a in data.data'>
-            <td>{{(data.page * data.pageSize + $index)+1}}</td>
-            <td>
-                <a href="{{a.predicate}}">{{a.predicate | mapPrefix}}</a>
+        <tr ng-repeat='a in data.data | index | orderBy : "predicate"'>
+            <td>{{(data.page * data.pageSize + index)+1}}</td>
+            <td class="ltr">
+                <a ng-show="a.index==0 || data.data[a.index-1].predicate != data.data[a.index].predicate" href="{{a.predicate}}">{{a.predicate | mapPrefix}}</a>
             </td>
-            <td>
+            <td class="ltr">
                 <span ng-if="a.object.type!='Resource'">{{a.object.value}}</span>
                 <a ng-if="a.object.type=='Resource'" ng-href="{{a.object.value}}">{{a.object.value | mapPrefix}}</a>
             </td>
@@ -70,6 +69,8 @@
         </tbody>
     </table>
 </div>
+
+<div ng-include="'templates/footer.html'"></div>
 </body>
 
 </html>

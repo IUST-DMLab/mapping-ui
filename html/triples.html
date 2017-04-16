@@ -36,9 +36,10 @@
 </head>
 
 <body ng-controller="TriplesController">
+<div ng-include="'templates/header.html'"></div>
 
-<div ng-if="data" class="container" style="direction: rtl;">
-    <br/>
+<div class="container" style="direction: rtl; min-height: 450px;">
+
 
     <div class="text-center">
         <form class="form-inline">
@@ -46,12 +47,12 @@
 
             <input type="text" class="input" ng-model="filter.object" placeholder="موجودیت" style="width: 450px;"/>
 
-            <button class="btn btn-success" ng-click="go(0)">Go</button>
-            <button class="btn btn-warning" ng-click="clear()">Clear</button>
+            <button class="btn btn-success" ng-click="go(0)">بیاب</button>
+            <!--<button class="btn btn-warning" ng-click="clear()">Clear</button>-->
         </form>
     </div>
 
-    <table cellpadding="10" cellspacing="10" style="width: 760px; margin:0 auto;">
+    <table ng-if="data.data" cellpadding="10" cellspacing="10" style="width: 760px; margin:0 auto;">
         <tr>
             <td>
                 <div paging
@@ -93,7 +94,10 @@
         </tr>
         </tbody>
     </table>
+
 </div>
+
+<div ng-include="'templates/footer.html'"></div>
 </body>
 
 </html>
