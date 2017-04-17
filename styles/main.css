@@ -45,6 +45,21 @@
   font-family: IRANSans-web, Sahel, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14px;
 }
+.ltr {
+  direction: ltr;
+}
+.rtl {
+  direction: rtl;
+}
+.left {
+  text-align: left;
+}
+.right {
+  text-align: right;
+}
+.center {
+  text-align: center;
+}
 .pagination > li > a {
   cursor: pointer;
 }

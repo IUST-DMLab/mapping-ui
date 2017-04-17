@@ -56,11 +56,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat='a in data.data | index | orderBy : "predicate"'>
+        <!--<tr ng-repeat='a in data.data | index | orderBy : "predicate"'>-->
+        <tr ng-repeat='a in data.data'>
             <td>{{(data.page * data.pageSize + $index)+1}}</td>
             <td class="ltr">
                 <!--<div>{{data.data[a.index-1].predicate | mapPrefix}}</div>-->
-                <a ng-show="a.index==0 || data.data[a.index-1].predicate != data.data[a.index].predicate" href="{{a.predicate}}">{{a.predicate | mapPrefix}}</a>
+                <!--<a ng-show="a.index==0 || data.data[a.index-1].predicate != data.data[a.index].predicate" href="{{a.predicate}}">{{a.predicate | mapPrefix}}</a>-->
+                <a href="{{a.predicate}}">{{a.predicate | mapPrefix}}</a>
             </td>
             <td class="ltr">
                 <span ng-if="a.object.type!='Resource'">{{a.object.value}}</span>
