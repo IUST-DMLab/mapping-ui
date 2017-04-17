@@ -179,59 +179,80 @@ app.controller('TriplesController', function ($scope, $timeout, RestService) {
 
 
 app.controller('TripleController', function ($scope, $timeout, RestService) {
-    $scope.filter = {};
-    $scope.go = go;
+        $scope.filter = {};
+        $scope.go = go;
 
-    $timeout(function () {
-        go(0);
-    }, 500);
+        $timeout(function () {
+            go(0);
+        }, 500);
 
-    function go() {
-        var subject = getParameterByName('subject');
+        function go() {
+            var subject = getParameterByName('subject');
 
-        RestService.tripleBySubject(subject)
-            .success(function (data) {
-                $scope.data = {
-                    data : angular.copy(data.data).sort(compare)
-                };
+            RestService.tripleBySubject(subject)
+                .success(function (data) {
+                    var list = angular.copy(data.data).sort(compare);
+                    var groups = [];
+                    if (list.length)
+                        groups.push({item: list[0], values: [list[0]]});
 
-                var titleRow = $scope.data.data.filter(function (item) {
-                    return item.predicate.endsWith('label');
-                })[0];
+                    for (var i = 1; i < list.length; i++) {
+                        var prev = list[i - 1];
+                        var curr = list[i];
 
-                $scope.data.pageTitle = titleRow ? titleRow.object.value : '***';
+                        if (curr.predicate === prev.predicate) {
+                            groups[groups.length-1].values.push(curr);
+                        }
+                        else {
+                            groups.push({item: curr, values: [curr]});
+                        }
+                    }
+console.log(groups);
+                    $scope.data = {
+                        data: groups
+                    };
 
-                /**/
-                var clazzRow = $scope.data.data.filter(function (item) {
-                    return item.predicate.endsWith('instanceOf');
-                })[0];
+                    var titleRow = data.data.filter(function (item) {
+                        return item.predicate.endsWith('label');
+                    })[0];
 
-                var clazz = clazzRow ? clazzRow.object.value || '' : undefined;
+                    $scope.data.pageTitle = titleRow ? titleRow.object.value : '***';
 
-                if (clazz) {
-                    clazz = clazz.split('/').pop();
-                    RestService.translate(clazz)
-                        .success(function (tr) {
-                            $scope.data.clazz = clazzRow ? tr.faLabel : '***';
-                        });
+                    /**/
+                    var clazzRow = data.data.filter(function (item) {
+                        return item.predicate.endsWith('instanceOf');
+                    })[0];
+
+                    var clazz = clazzRow ? clazzRow.object.value || '' : undefined;
+
+                    if (clazz) {
+                        clazz = clazz.split('/').pop();
+                        RestService.translate(clazz)
+                            .success(function (tr) {
+                                $scope.data.clazz = clazzRow ? tr.faLabel : '***';
+                            });
+                    }
+
+                    //$scope.data.data = data.data.filter(function (x) {
+                    //    return !x.predicate.endsWith('label') && !x.predicate.endsWith('instanceOf');
+                    //});
+
                 }
+            )
+            ;
+        }
 
-                //$scope.data.data = data.data.filter(function (x) {
-                //    return !x.predicate.endsWith('label') && !x.predicate.endsWith('instanceOf');
-                //});
+        function compare(a, b) {
+            if (a.predicate < b.predicate)
+                return -1;
+            if (a.predicate > b.predicate)
+                return 1;
+            return 0;
+        }
 
-            });
     }
-
-    function compare(a,b) {
-        if (a.predicate < b.predicate)
-            return -1;
-        if (a.predicate > b.predicate)
-            return 1;
-        return 0;
-    }
-
-});
+)
+;
 
 
 function getParameterByName(name, url) {
