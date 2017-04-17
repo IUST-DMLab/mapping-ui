@@ -191,7 +191,9 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
 
         RestService.tripleBySubject(subject)
             .success(function (data) {
-                $scope.data = data;
+                $scope.data = {
+                    data : angular.copy(data.data).sort(compare)
+                };
 
                 var titleRow = $scope.data.data.filter(function (item) {
                     return item.predicate.endsWith('label');
@@ -219,6 +221,14 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                 //});
 
             });
+    }
+
+    function compare(a,b) {
+        if (a.predicate < b.predicate)
+            return -1;
+        if (a.predicate > b.predicate)
+            return 1;
+        return 0;
     }
 
 });
