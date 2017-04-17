@@ -207,7 +207,7 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                             groups.push({item: curr, values: [curr]});
                         }
                     }
-console.log(groups);
+
                     $scope.data = {
                         data: groups
                     };

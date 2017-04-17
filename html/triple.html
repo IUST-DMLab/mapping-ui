@@ -26,6 +26,8 @@
 
     <script type="text/javascript" src="../node_modules/angular-paging/dist/paging.min.js"></script>
 
+    <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css"/>
+
     <script type="text/javascript" src="../node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
     <script type="text/javascript" src="../node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
     <script type="text/javascript" src="../scripts/app/app.js"></script>
@@ -61,14 +63,27 @@
             <td class="ltr">
                 <a href="{{a.item.predicate}}">{{a.item.predicate | mapPrefix}}</a>
             </td>
-            <td>
-                <ul>
-                    <li ng-repeat="v in a.values" class="">
-                        <span ng-if="v.object.lang" class="small-text">({{v.object.lang}})</span>
-                        <span ng-if="v.object.type!='Resource'">{{v.object.value}}</span>
-                        <a ng-if="v.object.type=='Resource'" ng-href="{{v.object.value}}">{{v.object.value | mapPrefix}}</a>
-                    </li>
-                </ul>
+            <td class="rtl">
+                <!--<ul>-->
+                    <div ng-repeat="v in a.values">
+                        <table cellpadding="2" cellspacing="2">
+                            <tr>
+                                <td>
+                                    <span class="fa smaller-text fa-circle" style="margin-left:5px;"></span>
+                                </td>
+                                <td>
+                                    <span ng-if="v.object.type!='Resource'">{{v.object.value}}</span>
+                                </td>
+                                <td>
+                                    <a ng-if="v.object.type=='Resource'" ng-href="{{v.object.value}}">{{v.object.value | mapPrefix}}</a>
+                                </td>
+                                <td>
+                                    <span ng-if="v.object.lang" class="small-text">({{v.object.lang}})</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                <!--</ul>-->
             </td>
         </tr>
         </tbody>
