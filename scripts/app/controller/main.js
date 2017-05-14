@@ -181,6 +181,7 @@ app.controller('TriplesController', function ($scope, $timeout, RestService) {
 app.controller('TripleController', function ($scope, $timeout, RestService) {
     $scope.filter = {};
     $scope.go = go;
+    $scope.PREFIX = 'http://194.225.227.161/mapping/html/triple.html?subject=';
 
     $timeout(function () {
         go(0);

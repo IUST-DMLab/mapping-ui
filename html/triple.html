@@ -61,7 +61,7 @@
         <tr ng-repeat='a in data.data'>
             <td>{{($index)+1}}</td>
             <td class="ltr">
-                <a href="{{a.item.predicate}}">{{a.item.predicate | mapPrefix}}</a>
+                <a href="{{PREFIX}}{{a.item.predicate}}">{{a.item.predicate | mapPrefix}}</a>
             </td>
             <td class="rtl">
                 <!--<ul>-->
@@ -75,7 +75,7 @@
                                     <span ng-if="v.object.type!='Resource'">{{v.object.value}}</span>
                                 </td>
                                 <td>
-                                    <a ng-if="v.object.type=='Resource'" ng-href="{{v.object.value}}">{{v.object.value | mapPrefix}}</a>
+                                    <a ng-if="v.object.type=='Resource'" ng-href="{{PREFIX}}{{v.object.value}}">{{v.object.value | mapPrefix}}</a>
                                 </td>
                                 <td>
                                     <span ng-if="v.object.lang" class="small-text">({{v.object.lang}})</span>
