@@ -179,80 +179,119 @@ app.controller('TriplesController', function ($scope, $timeout, RestService) {
 
 
 app.controller('TripleController', function ($scope, $timeout, RestService) {
-        $scope.filter = {};
-        $scope.go = go;
+    $scope.filter = {};
+    $scope.go = go;
 
-        $timeout(function () {
-            go(0);
-        }, 500);
+    $timeout(function () {
+        go(0);
+    }, 500);
 
-        function go() {
-            var subject = getParameterByName('subject');
+    function go() {
+        var subject = getParameterByName('subject');
 
-            RestService.tripleBySubject(subject)
-                .success(function (data) {
-                    var list = angular.copy(data.data).sort(compare);
-                    var groups = [];
-                    if (list.length)
-                        groups.push({item: list[0], values: [list[0]]});
+        RestService.tripleBySubject(subject)
+            .success(function (data) {
+                var list = angular.copy(data.data).sort(compare);
+                var groups = [];
+                if (list.length)
+                    groups.push({item: list[0], values: [list[0]]});
 
-                    for (var i = 1; i < list.length; i++) {
-                        var prev = list[i - 1];
-                        var curr = list[i];
+                for (var i = 1; i < list.length; i++) {
+                    var prev = list[i - 1];
+                    var curr = list[i];
 
-                        if (curr.predicate === prev.predicate) {
-                            groups[groups.length-1].values.push(curr);
-                        }
-                        else {
-                            groups.push({item: curr, values: [curr]});
-                        }
+                    if (curr.predicate === prev.predicate) {
+                        groups[groups.length - 1].values.push(curr);
                     }
-
-                    $scope.data = {
-                        data: groups
-                    };
-
-                    var titleRow = data.data.filter(function (item) {
-                        return item.predicate.endsWith('label');
-                    })[0];
-
-                    $scope.data.pageTitle = titleRow ? titleRow.object.value : '***';
-
-                    /**/
-                    var clazzRow = data.data.filter(function (item) {
-                        return item.predicate.endsWith('instanceOf');
-                    })[0];
-
-                    var clazz = clazzRow ? clazzRow.object.value || '' : undefined;
-
-                    if (clazz) {
-                        clazz = clazz.split('/').pop();
-                        RestService.translate(clazz)
-                            .success(function (tr) {
-                                $scope.data.clazz = clazzRow ? tr.faLabel : '***';
-                            });
+                    else {
+                        groups.push({item: curr, values: [curr]});
                     }
-
-                    //$scope.data.data = data.data.filter(function (x) {
-                    //    return !x.predicate.endsWith('label') && !x.predicate.endsWith('instanceOf');
-                    //});
-
                 }
-            )
-            ;
-        }
 
-        function compare(a, b) {
-            if (a.predicate < b.predicate)
-                return -1;
-            if (a.predicate > b.predicate)
-                return 1;
-            return 0;
-        }
+                $scope.data = {
+                    data: groups
+                };
 
+                var titleRow = data.data.filter(function (item) {
+                    return item.predicate.endsWith('label');
+                })[0];
+
+                $scope.data.pageTitle = titleRow ? titleRow.object.value : '***';
+
+                /**/
+                var clazzRow = data.data.filter(function (item) {
+                    return item.predicate.endsWith('instanceOf');
+                })[0];
+
+                var clazz = clazzRow ? clazzRow.object.value || '' : undefined;
+
+                if (clazz) {
+                    clazz = clazz.split('/').pop();
+                    RestService.translate(clazz)
+                        .success(function (tr) {
+                            $scope.data.clazz = clazzRow ? tr.faLabel : '***';
+                        });
+                }
+
+                //$scope.data.data = data.data.filter(function (x) {
+                //    return !x.predicate.endsWith('label') && !x.predicate.endsWith('instanceOf');
+                //});
+
+            }
+        )
+        ;
     }
-)
-;
+
+    function compare(a, b) {
+        if (a.predicate < b.predicate)
+            return -1;
+        if (a.predicate > b.predicate)
+            return 1;
+        return 0;
+    }
+
+});
+
+
+app.controller('MappingsController', function ($scope, $timeout, RestService) {
+    $scope.go = go;
+
+    $timeout(function () {
+        go(0);
+    }, 500);
+
+    function go(page) {
+        RestService.getMappings(page, 20)
+            .success(function (data) {
+                $scope.data = data;
+                $scope.data.pageNo = $scope.data.page + 1;
+                $scope.data.searchPageNo = $scope.data.pageNo;
+            });
+    }
+
+    $scope.show = function (item) {
+        //$scope.selectedItem = item;
+
+        //var property_rules = _.flatten(_.map(item.properties, 'rules'));
+
+        var property_rules = _.flatten(item.properties.map(function(q){
+            return _.assign({property : q.property}, q.rules);
+        }));
+
+        var rec_rules = _.flatten(item.properties.map(function(q){
+            return _.assign({property : q.property}, q.recommendations);
+        }));
+
+        $scope.selectedItemRules = item.rules.concat(property_rules).concat(rec_rules);
+
+        $('#mapping').fadeIn();
+    };
+
+    $scope.hide = function () {
+        $('#mapping').fadeOut();
+    };
+
+});
 
 
 function getParameterByName(name, url) {

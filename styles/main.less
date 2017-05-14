@@ -56,6 +56,21 @@ td {
   background-color: #f9f9f9
 }
 
+td.link {
+
+  cursor: pointer;
+  
+  -webkit-transition: background-color 2s;
+  -moz-transition: background-color 2s;
+  -ms-transition: background-color 2s;
+  -o-transition: background-color 2s;
+  transition: background-color 2s;
+
+  &:hover {
+    background-color: #d9edf7;
+  }
+}
+
 .editing {
   border: solid 1px red;
 }
@@ -85,6 +100,22 @@ td {
   border: solid 1px #ddad4e;
   box-shadow: 0 0 4px 0px #ddd;
   margin: 0 auto;
+}
+
+
+#mapping {
+  direction: rtl;
+  position: fixed;
+  top: 20px;
+  left:20px;
+  right:20px;
+  bottom:20px;
+  overflow-y: scroll;
+  background-color: #d9edf7;
+  border:solid 1px #9acfea;
+  border-radius: 4px;
+  box-shadow: 0 0 20px 2px #555;
+  z-index: 2200;
 }
 
 /**/
@@ -122,4 +153,9 @@ td {
   padding: 10px 50px;
   text-align: center;
   border-top: solid 1px #aaa;
+
+  position: fixed;
+  right: 0;
+  left: 0;
+  bottom: 0;
 }
