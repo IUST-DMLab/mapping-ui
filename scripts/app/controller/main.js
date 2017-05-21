@@ -236,9 +236,7 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                 //    return !x.predicate.endsWith('label') && !x.predicate.endsWith('instanceOf');
                 //});
 
-            }
-        )
-        ;
+            });
     }
 
     function compare(a, b) {
@@ -254,6 +252,13 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
 
 app.controller('MappingsController', function ($scope, $timeout, RestService) {
     $scope.go = go;
+    $scope.autoCompleteOptions = {
+        minimumChars: 2,
+        dropdownHeight: '200',
+        data: function (term) {
+            return RestService.predicatesSearch(term);
+        }
+    };
 
     $timeout(function () {
         go(0);
@@ -295,7 +300,13 @@ app.controller('MappingsController', function ($scope, $timeout, RestService) {
         $scope.selectedItem.creationEpoch = undefined; // todo : must be fixed on server side
         $scope.selectedItem.modificationEpoch = undefined; // todo : must be fixed on server side
 
-        RestService.saveMappings($scope.selectedItem);
+        RestService.saveMappings($scope.selectedItem)
+            .success(function () {
+                $scope.hide();
+                go($scope.data.page);
+            });
+
+
     };
 
     $scope.show = function (item) {

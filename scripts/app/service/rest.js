@@ -241,8 +241,21 @@ app.service('RestService', ['$http', function ($http) {
         var url = 'http://194.225.227.161:8091/rs/v1/mappings/template/insert';
         var data = object;
         return post(url, data);
-    }
+    };
 
+    this.predicatesSearch = function (keyword) {
+        var req = {
+            method: 'GET',
+            url: 'http://194.225.227.161:8091/rs/v1/mappings/experts/predicates',
+            params: {
+                keyword: keyword
+            }
+        };
+
+        return http(req).then(function (response) {
+            return response.data || [];
+        });
+    };
 
 }]);
 
