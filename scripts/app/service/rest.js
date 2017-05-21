@@ -233,10 +233,17 @@ app.service('RestService', ['$http', function ($http) {
     // mappings
 
     this.getMappings = function (page, pageSize) {
-        //var url = 'http://194.225.227.161:8091/rs/v1/mappings/experts/templates?page=' + page + '&pageSize=' + pageSize;
         var url = 'http://194.225.227.161:8091/rs/v1/mappings/all?page=' + page + '&pageSize=' + pageSize;
         return post(url, {});
+    };
+
+    this.saveMappings = function (object) {
+        var url = 'http://194.225.227.161:8091/rs/v1/mappings/template/insert';
+        var data = object;
+        return post(url, data);
     }
+
+
 }]);
 
 

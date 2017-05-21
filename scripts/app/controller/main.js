@@ -1,5 +1,3 @@
-//console.log('hello!');
-//console.log(app);
 app.controller('MainController', function ($scope, $timeout, RestService) {
     // RestService.translationRoot().success(function (data) {
     //             $scope.greeting = data;
@@ -272,30 +270,50 @@ app.controller('MappingsController', function ($scope, $timeout, RestService) {
 
     $scope.save = function () {
 
-        let rules = $scope.selectedItemRules.filter(function (r) {
-            return r.valid;
-        });
+        function translate(items) {
+            return items.map((r)=> {
+                return {
+                    constant: r.constant,
+                    predicate: r.predicate,
+                    transform: r.transform,
+                    type: r.type,
+                    unit: r.unit
+                }
+            });
+        }
 
-        let recs = $scope.selectedItemRules.filter(function (r) {
-            return !r.valid;
-        });
+        let items = $scope.selectedItemPropertyRules.concat($scope.selectedItemPropertyRecommendations);
 
+        var rules = items.filter(r=>r.valid);
+        var recommendations = items.filter(r=>!r.valid);
+
+        for (let p of $scope.selectedItem.properties) {
+            p.template = undefined; // todo : must be fixed on server side
+            p.rules = translate(rules.filter(r=> r.property === p.property));
+            p.recommendations = translate(recommendations.filter(r=> r.property === p.property));
+        }
+        $scope.selectedItem.creationEpoch = undefined; // todo : must be fixed on server side
+        $scope.selectedItem.modificationEpoch = undefined; // todo : must be fixed on server side
+
+        RestService.saveMappings($scope.selectedItem);
     };
 
     $scope.show = function (item) {
 
-        console.log(item);
-
-        var property_rules = _.flatten(item.properties.map(function (q) {
-            return _.assign({property: q.property, valid: true, editable: true}, q.rules);
-        }));
-
-        var rec_rules = _.flatten(item.properties.map(function (q) {
-            return _.assign({property: q.property, valid: false, editable: true}, q.recommendations);
-        }));
+        var rules = [];
+        var recommendations = [];
+        for (let p of item.properties) {
+            for (let r of p.rules) {
+                rules.push(_.assign({property: p.property, valid: true, editable: true}, r));
+            }
+            for (let r of p.recommendations) {
+                recommendations.push(_.assign({property: p.property, valid: false, editable: true}, r));
+            }
+        }
 
         $scope.selectedItem = item;
-        $scope.selectedItemRules = item.rules.concat(property_rules).concat(rec_rules);
+        $scope.selectedItemPropertyRules = rules;
+        $scope.selectedItemPropertyRecommendations = recommendations;
 
         $('#mapping').fadeIn();
     };
