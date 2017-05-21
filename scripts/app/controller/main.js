@@ -270,19 +270,31 @@ app.controller('MappingsController', function ($scope, $timeout, RestService) {
             });
     }
 
+    $scope.save = function () {
+
+        let rules = $scope.selectedItemRules.filter(function (r) {
+            return r.valid;
+        });
+
+        let recs = $scope.selectedItemRules.filter(function (r) {
+            return !r.valid;
+        });
+
+    };
+
     $scope.show = function (item) {
-        //$scope.selectedItem = item;
 
-        //var property_rules = _.flatten(_.map(item.properties, 'rules'));
+        console.log(item);
 
-        var property_rules = _.flatten(item.properties.map(function(q){
-            return _.assign({property : q.property}, q.rules);
+        var property_rules = _.flatten(item.properties.map(function (q) {
+            return _.assign({property: q.property, valid: true, editable: true}, q.rules);
         }));
 
-        var rec_rules = _.flatten(item.properties.map(function(q){
-            return _.assign({property : q.property}, q.recommendations);
+        var rec_rules = _.flatten(item.properties.map(function (q) {
+            return _.assign({property: q.property, valid: false, editable: true}, q.recommendations);
         }));
 
+        $scope.selectedItem = item;
         $scope.selectedItemRules = item.rules.concat(property_rules).concat(rec_rules);
 
         $('#mapping').fadeIn();

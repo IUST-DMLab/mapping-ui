@@ -90,32 +90,47 @@
 </div>
 
 <div id="mapping" style="display: none;">
-    <div>
-        <span class="fa fa-lg fa-close" ng-click="hide();" style="color: #f00;; cursor: pointer; margin: 10px;"></span>
-    </div>
-    <div>
-        <table class="table" ng-if="selectedItemRules">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>property</th>
-                <th>predicate</th>
-                <th>constant</th>
-                <th>unit</th>
-                <th>transform</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr ng-repeat='r in selectedItemRules'>
-                <td>{{(data.page * data.pageSize + $index)+1}}</td>
-                <td>{{r.property}}</td>
-                <td>{{r.predicate}}</td>
-                <td>{{r.constant}}</td>
-                <td>{{r.unit}}</td>
-                <td>{{r.transform}}</td>
-            </tr>
-            </tbody>
-        </table>
+        <span class="fa fa-lg fa-close close" ng-click="hide();"></span>
+
+    <div style=" padding: 15px;">
+        <div>
+            <h3>{{selectedItem.template}}</h3>
+        </div>
+        <div>
+            <table class="table" ng-if="selectedItemRules">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>property</th>
+                    <th>predicate</th>
+                    <th>constant</th>
+                    <th>unit</th>
+                    <th>transform</th>
+                    <th>تایید</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat='r in selectedItemRules'>
+                    <td>{{(data.page * data.pageSize + $index)+1}}</td>
+                    <td>{{r.property}}</td>
+                    <td>
+                        <input type="text" ng-model="r.predicate"/>
+                    </td>
+                    <td>
+                        <input type="text" ng-model="r.constant"/></td>
+                    <td>{{r.unit}}</td>
+                    <td>{{r.transform}}</td>
+                    <td>
+                        <input type="checkbox" ng-model="r.valid" ng-if="r.editable">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <button type="button" ng-click="save();">ذخیره</button>
+            <button type="button" ng-click="hide();">انصراف</button>
+        </div>
     </div>
 </div>
 

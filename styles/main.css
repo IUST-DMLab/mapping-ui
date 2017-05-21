@@ -45,6 +45,9 @@
   font-family: IRANSans-web, Sahel, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14px;
 }
+input {
+  border: solid 1px #ddf2ff !important;
+}
 .ltr {
   direction: ltr;
 }
@@ -103,13 +106,25 @@ td.link:hover {
 .btn {
   font-size: 12px;
 }
+.close {
+  color: #a00;
+  cursor: pointer;
+  margin: 10px;
+  position: absolute;
+  left: 0;
+}
+.close:hover {
+  color: red;
+}
 /**/
 .loading {
-  position: absolute;
+  direction: rtl;
+  position: fixed;
   top: 10px;
   left: 0;
   right: 0;
   text-align: center;
+  z-index: 2200;
 }
 .loading span {
   background: -moz-linear-gradient(center bottom, #fef1d1 0pt, #fdebbd 100%) repeat scroll 0 0 transparent;

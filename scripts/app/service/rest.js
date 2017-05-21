@@ -10,11 +10,13 @@ app.service('RestService', ['$http', function ($http) {
 
     function handelError(error) {
         self.ingoing--;
+        loading.hide();
         console.log(error);
     }
 
     function handelSuccess(/*data, status, headers, config*/) {
         self.ingoing--;
+        loading.hide();
     }
 
     function http(req) {
@@ -22,21 +24,13 @@ app.service('RestService', ['$http', function ($http) {
         req.params.random = new Date().getTime();
         self.ingoing++;
 
-        $('#loading').remove();
-        $('body').append('<div id="loading" class="loading"><span>loading...</span></div>');
-
-        $('#loading').fadeIn();
-        return $http(req).error(function () {
-            handelError();
-            $('#loading').fadeOut();
-        }).success(function () {
-            handelSuccess();
-            $('#loading').fadeOut();
-        });
+        loading.show();
+        return $http(req).error(handelError).success(handelSuccess);
     }
 
     function post(url, data) {
         self.ingoing++;
+        loading.show();
         return $http.post(url, data).error(handelError).success(handelSuccess);
     }
 
@@ -236,10 +230,23 @@ app.service('RestService', ['$http', function ($http) {
         return http(req);
     };
 
+    // mappings
+
     this.getMappings = function (page, pageSize) {
-        var url = 'http://194.225.227.161:8091/rs/v1/mappings/experts/templates?page=' + page + '&pageSize=' + pageSize;
+        //var url = 'http://194.225.227.161:8091/rs/v1/mappings/experts/templates?page=' + page + '&pageSize=' + pageSize;
+        var url = 'http://194.225.227.161:8091/rs/v1/mappings/all?page=' + page + '&pageSize=' + pageSize;
         return post(url, {});
     }
-
-
 }]);
+
+
+var loading = {
+    show: function () {
+        $('#loading').remove();
+        $('body').append('<div id="loading" class="loading"><span>در حال تبادل اطلاعات ...</span></div>');
+        $('#loading').fadeIn();
+    },
+    hide: function () {
+        $('#loading').fadeOut();
+    }
+};
