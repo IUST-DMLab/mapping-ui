@@ -190,7 +190,9 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
 
         RestService.tripleBySubject(subject)
             .success(function (data) {
+                //console.log(data.data.map(x=>x.predicate));
                 var list = angular.copy(data.data).sort(compare);
+                //console.log(list.map(x=>x.predicate));
                 var groups = [];
                 if (list.length)
                     groups.push({item: list[0], values: [list[0]]});

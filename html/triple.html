@@ -60,8 +60,9 @@
         <tbody>
         <tr ng-repeat='a in data.data'>
             <td>{{($index)+1}}</td>
-            <td class="ltr">
-                <a href="{{PREFIX}}{{a.item.predicate}}">{{a.item.predicate | mapPrefix}}</a>
+            <td class="rtl">
+                <a ng-if="a.item.predicate.indexOf('http://fkg.iust.ac.ir/')>-1" href="{{PREFIX}}{{a.item.predicate}}">{{a.item.predicate | mapPrefix}}</a>
+                <a ng-if="a.item.predicate.indexOf('http://fkg.iust.ac.ir/')===-1" href="{{a.item.predicate}}">{{a.item.predicate | mapPrefix}}</a>
             </td>
             <td class="rtl">
                 <div ng-repeat="v in a.values">
