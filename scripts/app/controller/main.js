@@ -187,6 +187,14 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
 
     function go() {
         var subject = getParameterByName('subject');
+        //handle http://dmls.iust.ac.ir/resource/sth (no parameters)
+        if(subject == null) {
+          var l = decodeURIComponent(window.location.href);
+            if(l.indexOf('/resource') > -1 && l.indexOf('?') == -1)
+              subject = 'http://fkg.iust.ac.ir/resource/' + l.substring(l.lastIndexOf('/') + 1);
+            if(l.indexOf('/ontology') > -1 && l.indexOf('?') == -1)
+              subject = 'http://fkg.iust.ac.ir/ontology/' + l.substring(l.lastIndexOf('/') + 1);
+        }
 
         RestService.tripleBySubject(subject)
             .success(function (data) {
