@@ -40,7 +40,7 @@
 <body ng-controller="TripleController">
 <div ng-include="'templates/header.html'"></div>
 
-<div ng-if="data" class="container" style="direction: rtl; min-height: 450px;">
+<div ng-if="data" class="container" id="body">
     <h1>
         {{data.pageTitle}}
     </h1>
@@ -61,8 +61,9 @@
         <tr ng-repeat='a in data.data'>
             <td>{{($index)+1}}</td>
             <td class="rtl">
-                <a ng-if="a.item.predicate.indexOf('http://fkg.iust.ac.ir/')>-1" href="{{PREFIX}}{{a.item.predicate}}">{{a.item.predicate | mapPrefix}}</a>
-                <a ng-if="a.item.predicate.indexOf('http://fkg.iust.ac.ir/')===-1" href="{{a.item.predicate}}">{{a.item.predicate | mapPrefix}}</a>
+                <!--<a ng-if="a.item.predicate.indexOf('http://fkg.iust.ac.ir/')>-1" href="{{PREFIX}}{{a.item.predicate}}">{{a.item.predicate | mapPrefix}}</a>-->
+                <!--<a ng-if="a.item.predicate.indexOf('http://fkg.iust.ac.ir/')===-1" href="{{a.item.predicate}}">{{a.item.predicate | mapPrefix}}</a>-->
+                <a href="{{a.item.predicate}}">{{a.item.predicate | mapPrefix}}</a>
             </td>
             <td class="rtl">
                 <div ng-repeat="v in a.values">
@@ -74,12 +75,17 @@
                             <td ng-if="v.object.type!='Resource'">
                                 <span>{{v.object.value}}</span>
                             </td>
+                            <td ng-if="v.object.type=='Resource'">
+                                <a ng-href="{{v.object.value}}">{{v.object.value | mapPrefix}}</a>
+                            </td>
+<!--
                             <td ng-if="v.object.type=='Resource' && v.object.value.indexOf('http://fkg.iust.ac.ir/')===-1">
                                 <a ng-href="{{v.object.value}}">{{v.object.value | mapPrefix}}</a>
                             </td>
                             <td ng-if="v.object.type=='Resource' && v.object.value.indexOf('http://fkg.iust.ac.ir/')>-1">
                                 <a ng-href="{{PREFIX}}{{v.object.value}}">{{v.object.value | mapPrefix}}</a>
                             </td>
+-->
                             <td>
                                 <span ng-if="v.object.lang" class="small-text">({{v.object.lang}})</span>
                             </td>

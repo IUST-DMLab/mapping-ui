@@ -38,7 +38,7 @@
 <body ng-controller="TriplesController">
 <div ng-include="'templates/header.html'"></div>
 
-<div class="container" style="direction: rtl; min-height: 450px;">
+<div class="container" id="body">
 
 
     <div class="text-center">
@@ -89,7 +89,8 @@
         <tr ng-repeat='a in data.data'>
             <td>{{(data.page * data.pageSize + $index)+1}}</td>
             <td>
-                <a href="triple.html?subject={{a.subject}}">{{a.object.value}}</a>
+                <!--<a href="triple.html?subject={{a.subject}}">{{a.object.value}}</a>-->
+                <a href="{{a.subject}}">{{a.object.value}}</a>
             </td>
         </tr>
         </tbody>

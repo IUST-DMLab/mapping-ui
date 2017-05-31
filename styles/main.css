@@ -175,6 +175,14 @@ td.link:hover {
   float: right;
   padding: 10px 50px;
 }
+#body {
+  direction: rtl;
+  min-height: 450px;
+  margin-bottom: 80px;
+  border: solid 1px #eaeaea;
+  box-shadow: 0 0 20px 2px #eee;
+  border-radius: 4px;
+}
 #footer {
   direction: rtl;
   background-color: #e6e6e6;
