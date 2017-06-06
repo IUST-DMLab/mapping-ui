@@ -34,11 +34,11 @@ app.controller('MainController', function ($scope, $timeout, RestService) {
 
         RestService.translationTranslate(name, edit.faLabel,
             edit.faOtherLabels, edit.note, edit.approved).success(function (data) {
-                $scope.data.data[index].faLabel = edit.faLabel;
-                $scope.data.data[index].faOtherLabels = edit.faOtherLabels;
-                $scope.data.data[index].note = edit.note;
-                $scope.data.data[index].approved = edit.approved;
-            });
+            $scope.data.data[index].faLabel = edit.faLabel;
+            $scope.data.data[index].faOtherLabels = edit.faOtherLabels;
+            $scope.data.data[index].note = edit.note;
+            $scope.data.data[index].approved = edit.approved;
+        });
     }
 });
 
@@ -185,15 +185,16 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
         go(0);
     }, 500);
 
+    // http://localhost:63342/mapping-ui/html/triple.html?subject=http://fkg.iust.ac.ir/resource/%D8%AD%D8%B3%D9%86_%D8%B1%D9%88%D8%AD%D8%A7%D9%86%DB%8C
     function go() {
         var subject = getParameterByName('subject');
         //handle http://dmls.iust.ac.ir/resource/sth (no parameters)
-        if(subject == null) {
-          var l = decodeURIComponent(window.location.href);
-            if(l.indexOf('/resource') > -1 && l.indexOf('?') == -1)
-              subject = 'http://fkg.iust.ac.ir/resource/' + l.substring(l.lastIndexOf('/') + 1);
-            if(l.indexOf('/ontology') > -1 && l.indexOf('?') == -1)
-              subject = 'http://fkg.iust.ac.ir/ontology/' + l.substring(l.lastIndexOf('/') + 1);
+        if (subject == null) {
+            var l = decodeURIComponent(window.location.href);
+            if (l.indexOf('/resource') > -1 && l.indexOf('?') == -1)
+                subject = 'http://fkg.iust.ac.ir/resource/' + l.substring(l.lastIndexOf('/') + 1);
+            if (l.indexOf('/ontology') > -1 && l.indexOf('?') == -1)
+                subject = 'http://fkg.iust.ac.ir/ontology/' + l.substring(l.lastIndexOf('/') + 1);
         }
 
         RestService.tripleBySubject(subject)
@@ -227,25 +228,32 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
 
                 $scope.data.pageTitle = titleRow ? titleRow.object.value : '***';
 
-                /**/
-                var clazzRow = data.data.filter(function (item) {
-                    return item.predicate.endsWith('instanceOf');
-                })[0];
+                // ****************************************************************
+                let typeRows = data.data.filter(i => i.predicate.indexOf('#type') !== -1);
 
-                var clazz = clazzRow ? clazzRow.object.value || '' : undefined;
+                if (typeRows.length) {
+                    let N = typeRows.filter(v => v.object.value.endsWith('owl#NamedIndividual'))[0];
+                    let C = typeRows.filter(v => v.object.value.endsWith('owl#Class'))[0];
+                    let P = typeRows.filter(v => v.object.value.endsWith('owl#ObjectProperty'))[0];
 
-                if (clazz) {
-                    clazz = clazz.split('/').pop();
-                    RestService.translate(clazz)
-                        .success(function (tr) {
-                            $scope.data.clazz = clazzRow ? tr.faLabel : '***';
-                        });
+                    if (N) {
+                        let clazzRow = data.data.filter(i => i.predicate.endsWith('instanceOf'))[0];
+                        let clazz = clazzRow ? clazzRow.object.value || '' : undefined;
+                        if (clazz) {
+                            clazz = clazz.split('/').pop();
+                            RestService.translate(clazz)
+                                .success(function (tr) {
+                                    $scope.data.clazzTitle = clazzRow ? tr.faLabel : '***';
+                                });
+                        }
+                    }
+                    else if (C) {
+                        $scope.data.clazzTitle = 'کلاس هستان‌شناسی';
+                    }
+                    else if (P) {
+                        $scope.data.clazzTitle = 'خصیصه هستان‌شناسی';
+                    }
                 }
-
-                //$scope.data.data = data.data.filter(function (x) {
-                //    return !x.predicate.endsWith('label') && !x.predicate.endsWith('instanceOf');
-                //});
-
             });
     }
 
@@ -286,7 +294,7 @@ app.controller('MappingsController', function ($scope, $timeout, RestService) {
     $scope.save = function () {
 
         function translate(items) {
-            return items.map((r)=> {
+            return items.map((r) => {
                 return {
                     constant: r.constant,
                     predicate: r.predicate,
@@ -299,13 +307,13 @@ app.controller('MappingsController', function ($scope, $timeout, RestService) {
 
         let items = $scope.selectedItemPropertyRules.concat($scope.selectedItemPropertyRecommendations);
 
-        var rules = items.filter(r=>r.valid);
-        var recommendations = items.filter(r=>!r.valid);
+        var rules = items.filter(r => r.valid);
+        var recommendations = items.filter(r => !r.valid);
 
         for (let p of $scope.selectedItem.properties) {
             p.template = undefined; // todo : must be fixed on server side
-            p.rules = translate(rules.filter(r=> r.property === p.property));
-            p.recommendations = translate(recommendations.filter(r=> r.property === p.property));
+            p.rules = translate(rules.filter(r => r.property === p.property));
+            p.recommendations = translate(recommendations.filter(r => r.property === p.property));
         }
         $scope.selectedItem.creationEpoch = undefined; // todo : must be fixed on server side
         $scope.selectedItem.modificationEpoch = undefined; // todo : must be fixed on server side
