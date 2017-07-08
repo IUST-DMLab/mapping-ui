@@ -197,6 +197,7 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                 subject = 'http://fkg.iust.ac.ir/ontology/' + l.substring(l.lastIndexOf('/') + 1);
         }
 
+        //console.log('*** : ', subject);
         RestService.tripleBySubject(subject)
             .success(function (data) {
                 //console.log(data.data.map(x=>x.predicate));
@@ -222,11 +223,17 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                     data: groups
                 };
 
-                var titleRow = data.data.filter(function (item) {
-                    return item.predicate.endsWith('label');
+                let titleRow = data.data.filter(function (item) {
+                    if (item.predicate.endsWith('label')) console.log(item.predicate, item.object.value);
+                    return item.predicate.endsWith('#label');
                 })[0];
 
                 $scope.data.pageTitle = titleRow ? titleRow.object.value : '***';
+
+                // ****************************************************************
+
+                let picRow = data.data.filter(item => item.predicate.endsWith('/picture'))[0];
+                $scope.data.pagePic = picRow ? picRow.object.value : '';
 
                 // ****************************************************************
                 let typeRows = data.data.filter(i => i.predicate.indexOf('#type') !== -1);
