@@ -225,7 +225,7 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
 
                 let titleRow = data.data.filter(function (item) {
                     if (item.predicate.endsWith('label')) console.log(item.predicate, item.object.value);
-                    return item.predicate.endsWith('#label');
+                    return item.predicate.endsWith('http://www.w3.org/2000/01/rdf-schema#label');
                 })[0];
 
                 $scope.data.pageTitle = titleRow ? titleRow.object.value : '***';
