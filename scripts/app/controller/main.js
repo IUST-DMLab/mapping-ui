@@ -221,6 +221,7 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                     }
                 }
 
+                console.log(groups);
                 $scope.data = {
                     data: groups
                 };

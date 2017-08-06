@@ -6,6 +6,7 @@
 
     <title>Knowledge Graph - Triple UI</title>
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../node_modules/bootstrap-rtl/dist/css/bootstrap-rtl.min.css">
     <link rel="stylesheet" href="../node_modules/angular-ui-bootstrap/dist/ui-bootstrap-csp.css">
 
     <script type="text/javascript" src="../node_modules/jquery/dist/jquery.js"></script>
@@ -42,59 +43,68 @@
 
 <div ng-if="data" class="container" id="body">
 
-    <div class="col-xs-12 col-md-2 text">
-        <img ng-src="{{data.pagePic}}" style="max-width: 200px; max-height: 200px;" onerror="$(this).hide();"/>
-    </div>
-    <div class="col-xs-12 col-md-10">
-        <h1>
-            {{data.pageTitle}}
-        </h1>
-        <h4 style="color: gray;">
-            {{data.clazzTitle}}
-        </h4>
+    <div class="row">
+        <div class="col-xs-12 col-md-10">
+            <h1>
+                {{data.pageTitle}}
+            </h1>
+            <h4 style="color: gray;">
+                {{data.clazzTitle}}
+            </h4>
+        </div>
+        <div class="col-xs-12 col-md-2">
+            <img ng-src="{{data.pagePic}}" style="max-width: 200px; max-height: 200px;" onerror="$(this).hide();"/>
+        </div>
     </div>
 
     <br>
-    <table class="table" ng-if="data">
+    <table class="simple" ng-if="data">
         <thead>
         <tr>
-            <th>#</th>
-            <th>خصیصه</th>
-            <th>مقدار</th>
+            <th style="width: 80px;">#</th>
+            <th style="">خصیصه</th>
+            <th style="">مقدار</th>
+            <th style="width: 120px;" class="left">ماژول استخراج</th>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat='a in data.data'>
+        <tr ng-repeat='a in data.data' class="line">
             <td>{{($index)+1}}</td>
             <td class="rtl">
                 <a href="{{a.item.predicate}}" rel="noreferrer">{{a.item.predicate | mapPrefix}}</a>
             </td>
             <td class="rtl">
-                <div ng-repeat="v in a.values">
-                    <table cellpadding="2" cellspacing="2">
+                <div ng-repeat="v in a.values" class="property">
+                    <table cellpadding="2" cellspacing="2" class="simple">
                         <tr>
                             <td>
                                 <span class="fa smaller-text fa-circle" style="margin-left:5px;"></span>
                             </td>
-                            <td ng-if="v.object.type!='Resource'">
+                            <td ng-if="v.object.type!='Resource'" style="max-width: 30%;">
                                 <span>{{v.object.value}}</span>
                             </td>
-                            <td ng-if="v.object.type=='Resource'">
-                                <a ng-href="{{v.object.value}}" rel="noreferrer">{{v.object.value | mapPrefix}}</a>
+                            <td ng-if="v.object.type=='Resource'" style="max-width: 30%;">
+                                <a ng-if="v.object.value.indexOf('upload.wikimedia.org')===-1"
+                                   ng-href="{{v.object.value}}" rel="noreferrer">{{v.object.value | mapPrefix}}</a>
+                                <img ng-if="v.object.value.indexOf('upload.wikimedia.org')!==-1"
+                                   src="{{v.object.value}}" style="max-width: 120px; max-height: 120px;" />
                             </td>
                             <td>
-                                <span ng-if="v.object.lang" class="small-text">({{v.object.lang}})</span>
+                                <span ng-if="v.object.lang" class="small-text text-nowrap">({{v.object.lang}})</span>
                             </td>
                         </tr>
                     </table>
                 </div>
+            </td>
+            <td class="ltr left">
+                <div ng-repeat="s in a.item.sources">{{s.module}}</div>
             </td>
         </tr>
         </tbody>
     </table>
 </div>
 
-<div ng-include="'templates/footer.html'"></div>
+<!--<div ng-include="'templates/footer.html'"></div>-->
 </body>
 
 </html>
