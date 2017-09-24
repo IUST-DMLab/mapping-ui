@@ -230,6 +230,18 @@ app.service('RestService', ['$http', function ($http) {
         return http(req);
     };
 
+    this.tripleBySubject2 = function (subject) {
+        var req = {
+            method: 'GET',
+            url: 'http://dmls.iust.ac.ir:8091/rs/v2/subjects/get',
+            params: {
+                subject: subject
+            }
+        };
+
+        return http(req);
+    };
+
     // mappings
 
     this.getMappings = function (page, pageSize) {

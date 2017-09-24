@@ -199,7 +199,16 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                 subject = 'http://fkg.iust.ac.ir/property/' + l.substring(l.lastIndexOf('/') + 1);
         }
 
-        //console.log('*** : ', subject);
+        RestService.tripleBySubject2(subject)
+            .success(function(data){
+                console.log(data);
+
+                $scope.data = data;
+
+
+            });
+
+        return;
         RestService.tripleBySubject(subject)
             .success(function (data) {
                 //console.log(data.data.map(x=>x.predicate));

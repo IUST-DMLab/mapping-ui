@@ -71,36 +71,63 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat='a in data.data' class="line">
+        <tr ng-repeat='(triple, values) in data.triples' class="line">
             <td>{{($index)+1}}</td>
             <td class="rtl">
-                <a href="{{a.item.predicate}}" rel="noreferrer">{{a.item.predicate | mapPrefix}}</a>
+                <a href="{{triple}}" rel="noreferrer">{{triple | mapPrefix}}</a>
             </td>
             <td class="rtl">
-                <div ng-repeat="v in a.values" class="property">
+                <div ng-repeat="v in values" class="property">
                     <table cellpadding="2" cellspacing="2" class="simple">
                         <tr>
-                            <td>
+                            <td style="vertical-align: top;">
                                 <span class="fa smaller-text fa-circle" style="margin-left:5px;"></span>
                             </td>
-                            <td ng-if="v.object.type!='Resource'" style="max-width: 30%;">
-                                <span>{{v.object.value}}</span>
+                            <td ng-if="v.type!='Resource'" style="max-width: 30%;">
+                                <span>{{v.value}}</span>
                             </td>
-                            <td ng-if="v.object.type=='Resource'" style="max-width: 30%;">
-                                <a ng-if="v.object.value.indexOf('upload.wikimedia.org')===-1"
-                                   ng-href="{{v.object.value}}" rel="noreferrer">{{v.object.value | mapPrefix}}</a>
-                                <img ng-if="v.object.value.indexOf('upload.wikimedia.org')!==-1"
-                                   src="{{v.object.value}}" style="max-width: 120px; max-height: 120px;" />
+                            <td ng-if="v.type=='Resource'" style="max-width: 30%;vertical-align: top;">
+                                <a ng-if="v.value.indexOf('upload.wikimedia.org')===-1"
+                                   ng-href="{{v.value}}" rel="noreferrer">{{v.value | mapPrefix}}</a>
+                                <img ng-if="v.value.indexOf('upload.wikimedia.org')!==-1"
+                                     src="{{v.value}}" style="max-width: 120px; max-height: 120px;"/>
+                                <br>
+                                <div ng-repeat="(p, pp) in v.properties" style="margin-right: 20px;">
+                                    <table>
+                                        <td>
+                                            <span style="margin-left: 10px;">{{p | mapPrefix}}</span>
+                                        </td>
+                                        <td>
+                                            <table cellpadding="2" cellspacing="2" class="simple">
+                                                <tr>
+                                                    <td style="vertical-align: top;">
+                                                        <span class="fa smaller-text fa-circle" style="margin-left:5px;"></span>
+                                                    </td>
+                                                    <td ng-if="pp.type!='Resource'" style="max-width: 30%;">
+                                                        <span>{{pp.value}}</span>
+                                                    </td>
+                                                    <td ng-if="pp.type=='Resource'" style="max-width: 30%;vertical-align: top;">
+                                                        <a ng-if="pp.value.indexOf('upload.wikimedia.org')===-1"
+                                                           ng-href="{{pp.value}}" rel="noreferrer">{{pp.value | mapPrefix}}</a>
+                                                        <img ng-if="pp.value.indexOf('upload.wikimedia.org')!==-1"
+                                                             src="{{pp.value}}" style="max-width: 120px; max-height: 120px;"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </table>
+
+                                </div>
                             </td>
-                            <td>
-                                <span ng-if="v.object.lang" class="small-text text-nowrap">({{v.object.lang}})</span>
+                            <td style="vertical-align: top;">
+                                <span ng-if="v.lang" class="small-text text-nowrap">({{v.lang}})</span>
                             </td>
                         </tr>
                     </table>
                 </div>
             </td>
             <td class="ltr left">
-                <div ng-repeat="s in a.item.sources">{{s.module}}</div>
+                <div ng-repeat="v in values">{{v.source.module}}</div>
             </td>
         </tr>
         </tbody>
