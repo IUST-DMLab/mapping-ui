@@ -83,35 +83,44 @@
                             <td style="vertical-align: top;">
                                 <span class="fa smaller-text fa-circle" style="margin-left:5px;"></span>
                             </td>
-                            <td ng-if="v.type!='Resource'" style="max-width: 30%;">
-                                <span>{{v.value}}</span>
-                            </td>
-                            <td ng-if="v.type=='Resource'" style="max-width: 30%;vertical-align: top;">
-                                <a ng-if="v.value.indexOf('upload.wikimedia.org')===-1"
+                            <td style="max-width: 30%;vertical-align: top;">
+                                <span ng-if="v.type!='Resource'" style="max-width: 30%;">
+                                    {{v.value}}
+                                    <span ng-if="v.lang" class="small-text text-nowrap">({{v.lang}})</span>
+                                </span>
+                                <div ng-if="v.type=='Resource'" style="display: inline-block">
+                                    <a ng-if="v.value.indexOf('upload.wikimedia.org')===-1"
                                    ng-href="{{v.value}}" rel="noreferrer">{{v.value | mapPrefix}}</a>
-                                <img ng-if="v.value.indexOf('upload.wikimedia.org')!==-1"
-                                     src="{{v.value}}" style="max-width: 120px; max-height: 120px;"/>
+                                    <img ng-if="v.value.indexOf('upload.wikimedia.org')!==-1"
+                                         src="{{v.value}}" style="max-width: 120px; max-height: 120px;"/>
+                                </div>
                                 <br>
                                 <div ng-repeat="(p, pp) in v.properties" style="margin-right: 20px;">
                                     <table>
                                         <td>
                                             <!--<span style="margin-left: 10px;">{{p | mapPrefix}}</span>-->
-                                            <a href="{{p}}" rel="noreferrer" style="margin-left: 10px;">{{p | mapPrefix}}</a>
+                                            <a href="{{p}}" rel="noreferrer" style="margin-left: 10px;">{{p |
+                                                mapPrefix}}</a>
                                         </td>
                                         <td>
                                             <table cellpadding="2" cellspacing="2" class="simple">
                                                 <tr>
                                                     <td style="vertical-align: top;">
-                                                        <span class="fa smaller-text fa-circle" style="margin-left:5px;"></span>
+                                                        <span class="fa smaller-text fa-circle"
+                                                              style="margin-left:5px;"></span>
                                                     </td>
                                                     <td ng-if="pp.type!='Resource'" style="max-width: 30%;">
                                                         <span>{{pp.value}}</span>
+                                                        <span ng-if="pp.lang" class="small-text text-nowrap">({{pp.lang}})</span>
                                                     </td>
-                                                    <td ng-if="pp.type=='Resource'" style="max-width: 30%;vertical-align: top;">
+                                                    <td ng-if="pp.type=='Resource'"
+                                                        style="max-width: 30%;vertical-align: top;">
                                                         <a ng-if="pp.value.indexOf('upload.wikimedia.org')===-1"
-                                                           ng-href="{{pp.value}}" rel="noreferrer">{{pp.value | mapPrefix}}</a>
+                                                           ng-href="{{pp.value}}" rel="noreferrer">{{pp.value |
+                                                            mapPrefix}}</a>
                                                         <img ng-if="pp.value.indexOf('upload.wikimedia.org')!==-1"
-                                                             src="{{pp.value}}" style="max-width: 120px; max-height: 120px;"/>
+                                                             src="{{pp.value}}"
+                                                             style="max-width: 120px; max-height: 120px;"/>
                                                     </td>
                                                 </tr>
                                             </table>
@@ -121,7 +130,7 @@
                                 </div>
                             </td>
                             <td style="vertical-align: top;">
-                                <span ng-if="v.lang" class="small-text text-nowrap">({{v.lang}})</span>
+
                             </td>
                         </tr>
                     </table>
