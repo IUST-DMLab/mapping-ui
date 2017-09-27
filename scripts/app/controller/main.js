@@ -243,6 +243,9 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                                 RestService.translate(clazz)
                                     .success(function (tr) {
                                         $scope.data.clazzTitle = clazzRow ? tr.faLabel : '***';
+                                    })
+                                    .error(function(){
+                                        $scope.data.clazzTitle = clazz;
                                     });
                             }
                         }
