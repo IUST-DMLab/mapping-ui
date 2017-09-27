@@ -204,7 +204,56 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                 subject = 'http://fkg.iust.ac.ir/property/' + l.substring(l.lastIndexOf('/') + 1);
         }
 
-        if (subject.indexOf('/resource/') !== -1) {
+        if (subject.indexOf('/ontology/') !== -1) {
+            function compare(a, b) {
+                if (a.predicate < b.predicate)
+                    return -1;
+                if (a.predicate > b.predicate)
+                    return 1;
+                return 0;
+            }
+
+            function LangSort(a, b) {
+                return a.object.lang < b.object.lang;
+            }
+
+            RestService.ontologyBySubject(subject)
+                .success(function (data) {
+
+                    let list = angular.copy(data.data).sort(compare);
+                    //console.log(list.map(x=>x.predicate));
+                    let groups = [];
+                    if (list.length)
+                        groups.push({item: list[0], values: [list[0]]});
+
+                    for (let i = 1; i < list.length; i++) {
+                        let prev = list[i - 1];
+                        let curr = list[i];
+
+                        if (curr.predicate === prev.predicate) {
+                            groups[groups.length - 1].values.push(curr);
+                        }
+                        else {
+                            groups.push({item: curr, values: [curr]});
+                        }
+                    }
+                    groups = groups
+                        .map((g) => {
+                            g.name = g.item.predicate.split('/').pop().split('#').pop();
+                            return g;
+                        }).sort(PredicateSort);
+                    //console.log(groups);
+
+                    let titles = data.data.filter(i => i.predicate === 'http://www.w3.org/2000/01/rdf-schema#label').sort(LangSort);
+                    let pageTitle = titles.map(i => i.object.value).join(' - ');
+
+                    $scope.data = {
+                        ontologies: groups,
+                        pageTitle: pageTitle
+                    };
+                });
+        }
+        else /*if (subject.indexOf('/resource/') !== -1)*/ {
             RestService.tripleBySubject2(subject)
                 .success(function (data) {
 
@@ -259,55 +308,7 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
 
                 });
         }
-        else if (subject.indexOf('/ontology/') !== -1) {
-            function compare(a, b) {
-                if (a.predicate < b.predicate)
-                    return -1;
-                if (a.predicate > b.predicate)
-                    return 1;
-                return 0;
-            }
 
-            function LangSort(a, b) {
-                return a.object.lang < b.object.lang;
-            }
-
-            RestService.ontologyBySubject(subject)
-                .success(function (data) {
-
-                    let list = angular.copy(data.data).sort(compare);
-                    //console.log(list.map(x=>x.predicate));
-                    let groups = [];
-                    if (list.length)
-                        groups.push({item: list[0], values: [list[0]]});
-
-                    for (let i = 1; i < list.length; i++) {
-                        let prev = list[i - 1];
-                        let curr = list[i];
-
-                        if (curr.predicate === prev.predicate) {
-                            groups[groups.length - 1].values.push(curr);
-                        }
-                        else {
-                            groups.push({item: curr, values: [curr]});
-                        }
-                    }
-                    groups = groups
-                        .map((g) => {
-                            g.name = g.item.predicate.split('/').pop().split('#').pop();
-                            return g;
-                        }).sort(PredicateSort);
-                    //console.log(groups);
-
-                    let titles = data.data.filter(i => i.predicate === 'http://www.w3.org/2000/01/rdf-schema#label').sort(LangSort);
-                    let pageTitle = titles.map(i => i.object.value).join(' - ');
-
-                    $scope.data = {
-                        ontologies: groups,
-                        pageTitle: pageTitle
-                    };
-                });
-        }
 
 
         // RestService.tripleBySubject(subject)
