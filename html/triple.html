@@ -59,9 +59,7 @@
     </div>
 
     <br>
-    <table class="simple"
-           style="width: 100%;"
-           ng-if="data">
+    <table ng-if="data.items" class="simple" style="width: 100%;">
         <thead>
         <tr>
             <th style="width: 80px;">#</th>
@@ -71,13 +69,13 @@
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat='(triple, values) in data.triples' class="line">
+        <tr ng-repeat='item in data.items' class="line">
             <td>{{($index)+1}}</td>
             <td class="rtl">
-                <a href="{{triple}}" rel="noreferrer">{{triple | mapPrefix}}</a>
+                <a href="{{item.predicate}}" rel="noreferrer">{{item.predicate | mapPrefix}}</a>
             </td>
             <td class="rtl">
-                <div ng-repeat="v in values" class="property">
+                <div ng-repeat="v in item.triples" class="property">
                     <table cellpadding="2" cellspacing="2" class="simple">
                         <tr>
                             <td style="vertical-align: top;">
@@ -90,9 +88,9 @@
                                 </span>
                                 <div ng-if="v.type=='Resource'" style="display: inline-block">
                                     <a ng-if="v.value.indexOf('upload.wikimedia.org')===-1"
-                                   ng-href="{{v.value}}" rel="noreferrer">{{v.value | mapPrefix}}</a>
+                                       ng-href="{{v.value}}" rel="noreferrer">{{v.value | mapPrefix}}</a>
                                     <img ng-if="v.value.indexOf('upload.wikimedia.org')!==-1"
-                                         src="{{v.value}}" style="max-width: 120px; max-height: 120px;"/>
+                                         ng-src="{{v.value}}" style="max-width: 120px; max-height: 120px;"/>
                                 </div>
                                 <br>
                                 <div ng-repeat="(p, pp) in v.properties" style="margin-right: 20px;">
@@ -119,7 +117,7 @@
                                                            ng-href="{{pp.value}}" rel="noreferrer">{{pp.value |
                                                             mapPrefix}}</a>
                                                         <img ng-if="pp.value.indexOf('upload.wikimedia.org')!==-1"
-                                                             src="{{pp.value}}"
+                                                             ng-src="{{pp.value}}"
                                                              style="max-width: 120px; max-height: 120px;"/>
                                                     </td>
                                                 </tr>
@@ -137,11 +135,50 @@
                 </div>
             </td>
             <td class="ltr left">
-                <div ng-repeat="v in values">{{v.source.module}}</div>
+                <div ng-repeat="v in item.triples">{{v.source.module}}</div>
             </td>
         </tr>
         </tbody>
     </table>
+
+
+    <table ng-if="data.ontologies" class="simple" style="width: 100%;">
+        <thead>
+        <tr>
+            <th style="width: 80px;">#</th>
+            <th style="">گزاره</th>
+            <th style="">مقدار</th>
+            <!--<th style="width: 120px;" class="left">ماژول استخراج</th>-->
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat='ontology in data.ontologies' class="line">
+            <td>{{($index)+1}}</td>
+            <td class="rtl">
+                <a href="{{ontology.item.predicate}}">{{ontology.item.predicate | mapPrefix}}</a>
+            </td>
+            <td class="rtl">
+
+                <table cellpadding="2" cellspacing="2" class="simple">
+                    <tr ng-repeat='value in ontology.values'>
+                        <td ng-class="value.object.lang==='en' ? 'ltr' : ''">
+                            <span ng-if="value.object.lang!=='fa'" class="small-text text-nowrap">({{value.object.lang}})</span>
+                            <a ng-if="value.object.type==='Resource'" href="{{value.object.value}}" rel="noreferrer">{{value.object.value
+                                | mapPrefix}}</a>
+                            <span ng-if="value.object.type==='String'">{{value.object.value}}</span>
+                            <span ng-if="value.object.lang==='fa'" class="small-text text-nowrap">({{value.object.lang}})</span>
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <!--<td class="ltr left"></td>-->
+        </tr>
+        </tbody>
+    </table>
+
 </div>
 
 <!--<div ng-include="'templates/footer.html'"></div>-->

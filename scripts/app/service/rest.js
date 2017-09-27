@@ -112,6 +112,17 @@ app.service('RestService', ['$http', function ($http) {
         });
     };
 
+    this.ontologyBySubject = function (subject) {
+        var req = {
+            method: 'GET',
+            url: 'http://dmls.iust.ac.ir:8091/rs/v2/ontology/search',
+            params: {
+                subject: subject || ''
+            }
+        };
+        return http(req);
+    };
+
     this.templateMappingSearch = function (page, pageSize, templateName, className, like, approved) {
         var req = {
             method: 'GET',
@@ -142,6 +153,8 @@ app.service('RestService', ['$http', function ($http) {
         };
         return http(req);
     };
+
+
 
     /* Property Mapping */
 

@@ -187,6 +187,11 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
 
     // http://localhost:63342/mapping-ui/html/triple.html?subject=http://fkg.iust.ac.ir/resource/%D8%AD%D8%B3%D9%86_%D8%B1%D9%88%D8%AD%D8%A7%D9%86%DB%8C
     function go() {
+
+        function PredicateSort(a, b) {
+            return a.name > b.name;
+        }
+
         var subject = getParameterByName('subject');
         //handle http://dmls.iust.ac.ir/resource/sth (no parameters)
         if (subject == null) {
@@ -199,89 +204,174 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                 subject = 'http://fkg.iust.ac.ir/property/' + l.substring(l.lastIndexOf('/') + 1);
         }
 
-        RestService.tripleBySubject2(subject)
-            .success(function(data){
-                console.log(data);
+        if (subject.indexOf('/resource/') !== -1) {
+            RestService.tripleBySubject2(subject)
+                .success(function (data) {
 
-                $scope.data = data;
-
-
-            });
-
-        return;
-        RestService.tripleBySubject(subject)
-            .success(function (data) {
-                //console.log(data.data.map(x=>x.predicate));
-                var list = angular.copy(data.data).sort(compare);
-                //console.log(list.map(x=>x.predicate));
-                var groups = [];
-                if (list.length)
-                    groups.push({item: list[0], values: [list[0]]});
-
-                for (var i = 1; i < list.length; i++) {
-                    var prev = list[i - 1];
-                    var curr = list[i];
-
-                    if (curr.predicate === prev.predicate) {
-                        groups[groups.length - 1].values.push(curr);
-                    }
-                    else {
-                        groups.push({item: curr, values: [curr]});
-                    }
-                }
-
-                console.log(groups);
-                $scope.data = {
-                    data: groups
-                };
-
-                let titleRow = data.data.filter(function (item) {
-                    if (item.predicate.endsWith('label')) console.log(item.predicate, item.object.value);
-                    return item.predicate.endsWith('http://www.w3.org/2000/01/rdf-schema#label');
-                })[0];
-
-                $scope.data.pageTitle = titleRow ? titleRow.object.value : '***';
-
-                // ****************************************************************
-
-                let picRow = data.data.filter(item => item.predicate.endsWith('/picture'))[0];
-                $scope.data.pagePic = picRow ? picRow.object.value : '';
-
-                // ****************************************************************
-                let typeRows = data.data.filter(i => i.predicate.indexOf('#type') !== -1);
-
-                if (typeRows.length) {
-                    let N = typeRows.filter(v => v.object.value.endsWith('owl#NamedIndividual'))[0];
-                    let C = typeRows.filter(v => v.object.value.endsWith('owl#Class'))[0];
-                    let P = typeRows.filter(v => v.object.value.endsWith('owl#ObjectProperty'))[0];
-
-                    if (N) {
-                        let clazzRow = data.data.filter(i => i.predicate.endsWith('instanceOf'))[0];
-                        let clazz = clazzRow ? clazzRow.object.value || '' : undefined;
-                        if (clazz) {
-                            clazz = clazz.split('/').pop();
-                            RestService.translate(clazz)
-                                .success(function (tr) {
-                                    $scope.data.clazzTitle = clazzRow ? tr.faLabel : '***';
-                                });
+                    let _triples = [];
+                    let d2 = angular.copy(data);
+                    for (let q in d2.triples) {
+                        if (d2.triples.hasOwnProperty(q)) {
+                            _triples.push({
+                                name: q.split('/').pop().split('#').pop(),
+                                predicate: q,
+                                triples: d2.triples[q]
+                            });
                         }
                     }
-                    else if (C) {
-                        $scope.data.clazzTitle = 'کلاس هستان‌شناسی';
-                    }
-                    else if (P) {
-                        $scope.data.clazzTitle = 'خصیصه هستان‌شناسی';
-                    }
-                }
-            });
-    }
+                    // d2.triples = undefined;
+                    d2.items = _triples.sort(PredicateSort);
 
-    function compare(a, b) {
-        if (a.predicate < b.predicate)
-            return -1;
-        if (a.predicate > b.predicate)
-            return 1;
-        return 0;
+                    $scope.data = d2;
+
+                    let titleTriple = data.triples['http://www.w3.org/2000/01/rdf-schema#label'];
+                    let pageTitle = titleTriple ? (titleTriple[0] ? titleTriple[0].value : undefined) : undefined;
+                    $scope.data.pageTitle = pageTitle || '***';
+
+                    // let typeRows = data.data.filter(i => i.predicate.indexOf('#type') !== -1);
+                    let typeRows = data.triples['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'];
+                    if (typeRows.length) {
+                        let N = typeRows.filter(v => v.value.endsWith('owl#NamedIndividual'))[0];
+                        let C = typeRows.filter(v => v.value.endsWith('owl#Class'))[0];
+                        let P = typeRows.filter(v => v.value.endsWith('owl#ObjectProperty'))[0];
+
+                        if (N) {
+                            let clazzRow = data.triples['http://www.w3.org/1999/02/22-rdf-syntax-ns#instanceOf'];
+                            let clazz = clazzRow ? (clazzRow[0] ? clazzRow[0].value : '') : '';
+                            if (clazz) {
+                                clazz = clazz.split('/').pop();
+                                RestService.translate(clazz)
+                                    .success(function (tr) {
+                                        $scope.data.clazzTitle = clazzRow ? tr.faLabel : '***';
+                                    });
+                            }
+                        }
+                        else if (C) {
+                            $scope.data.clazzTitle = 'کلاس هستان‌شناسی';
+                        }
+                        else if (P) {
+                            $scope.data.clazzTitle = 'خصیصه هستان‌شناسی';
+                        }
+                    }
+
+                });
+        }
+        else if (subject.indexOf('/ontology/') !== -1) {
+            function compare(a, b) {
+                if (a.predicate < b.predicate)
+                    return -1;
+                if (a.predicate > b.predicate)
+                    return 1;
+                return 0;
+            }
+
+            function LangSort(a, b) {
+                return a.object.lang < b.object.lang;
+            }
+
+            RestService.ontologyBySubject(subject)
+                .success(function (data) {
+
+                    let list = angular.copy(data.data).sort(compare);
+                    //console.log(list.map(x=>x.predicate));
+                    let groups = [];
+                    if (list.length)
+                        groups.push({item: list[0], values: [list[0]]});
+
+                    for (let i = 1; i < list.length; i++) {
+                        let prev = list[i - 1];
+                        let curr = list[i];
+
+                        if (curr.predicate === prev.predicate) {
+                            groups[groups.length - 1].values.push(curr);
+                        }
+                        else {
+                            groups.push({item: curr, values: [curr]});
+                        }
+                    }
+                    groups = groups
+                        .map((g) => {
+                            g.name = g.item.predicate.split('/').pop().split('#').pop();
+                            return g;
+                        }).sort(PredicateSort);
+                    //console.log(groups);
+
+                    let titles = data.data.filter(i => i.predicate === 'http://www.w3.org/2000/01/rdf-schema#label').sort(LangSort);
+                    let pageTitle = titles.map(i => i.object.value).join(' - ');
+
+                    $scope.data = {
+                        ontologies: groups,
+                        pageTitle: pageTitle
+                    };
+                });
+        }
+
+
+        // RestService.tripleBySubject(subject)
+        //     .success(function (data) {
+        //         //console.log(data.data.map(x=>x.predicate));
+        //         var list = angular.copy(data.data).sort(compare);
+        //         //console.log(list.map(x=>x.predicate));
+        //         var groups = [];
+        //         if (list.length)
+        //             groups.push({item: list[0], values: [list[0]]});
+        //
+        //         for (var i = 1; i < list.length; i++) {
+        //             var prev = list[i - 1];
+        //             var curr = list[i];
+        //
+        //             if (curr.predicate === prev.predicate) {
+        //                 groups[groups.length - 1].values.push(curr);
+        //             }
+        //             else {
+        //                 groups.push({item: curr, values: [curr]});
+        //             }
+        //         }
+        //
+        //         console.log(groups);
+        //         $scope.data = {
+        //             data: groups
+        //         };
+        //
+        //         let titleRow = data.data.filter(function (item) {
+        //             if (item.predicate.endsWith('label')) console.log(item.predicate, item.object.value);
+        //             return item.predicate.endsWith('http://www.w3.org/2000/01/rdf-schema#label');
+        //         })[0];
+        //
+        //         $scope.data.pageTitle = titleRow ? titleRow.object.value : '***';
+        //
+        //         // ****************************************************************
+        //
+        //         let picRow = data.data.filter(item => item.predicate.endsWith('/picture'))[0];
+        //         $scope.data.pagePic = picRow ? picRow.object.value : '';
+        //
+        //         // ****************************************************************
+        //         let typeRows = data.data.filter(i => i.predicate.indexOf('#type') !== -1);
+        //
+        //         if (typeRows.length) {
+        //             let N = typeRows.filter(v => v.object.value.endsWith('owl#NamedIndividual'))[0];
+        //             let C = typeRows.filter(v => v.object.value.endsWith('owl#Class'))[0];
+        //             let P = typeRows.filter(v => v.object.value.endsWith('owl#ObjectProperty'))[0];
+        //
+        //             if (N) {
+        //                 let clazzRow = data.data.filter(i => i.predicate.endsWith('instanceOf'))[0];
+        //                 let clazz = clazzRow ? clazzRow.object.value || '' : undefined;
+        //                 if (clazz) {
+        //                     clazz = clazz.split('/').pop();
+        //                     RestService.translate(clazz)
+        //                         .success(function (tr) {
+        //                             $scope.data.clazzTitle = clazzRow ? tr.faLabel : '***';
+        //                         });
+        //                 }
+        //             }
+        //             else if (C) {
+        //                 $scope.data.clazzTitle = 'کلاس هستان‌شناسی';
+        //             }
+        //             else if (P) {
+        //                 $scope.data.clazzTitle = 'خصیصه هستان‌شناسی';
+        //             }
+        //         }
+        //     });
     }
 
 });

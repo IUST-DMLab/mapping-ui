@@ -147,6 +147,7 @@ table.simple td {
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: normal;
+  padding: 2px;
 }
 table.simple tr.line {
   border-top: solid 1px #ddd;
