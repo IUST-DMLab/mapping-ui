@@ -206,7 +206,7 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                 subject = 'http://fkg.iust.ac.ir/property/' + l.substring(l.lastIndexOf('/') + 1);
         }
 
-        if (subject.indexOf('/ontology/') !== -1) {
+        if (subject.indexOf('/ontology/') !== -1 || subject.indexOf('/property') !== -1) {
             function compare(a, b) {
                 if (a.predicate < b.predicate)
                     return -1;
