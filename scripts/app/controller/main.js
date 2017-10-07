@@ -189,8 +189,8 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
     function go() {
 
         function PredicateSort(a, b) {
-            if(a.name > b.name) return 1;
-            if(a.name < b.name) return -1;
+            if (a.name > b.name) return 1;
+            if (a.name < b.name) return -1;
             return 0;
         }
 
@@ -200,7 +200,7 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
             var l = decodeURIComponent(window.location.href);
             if (l.indexOf('/resource') > -1 && l.indexOf('?') == -1)
                 subject = 'http://fkg.iust.ac.ir/resource/' + l.substring(l.lastIndexOf('/') + 1);
-	    if (l.indexOf('/category') > -1 && l.indexOf('?') == -1)
+            if (l.indexOf('/category') > -1 && l.indexOf('?') == -1)
                 subject = 'http://fkg.iust.ac.ir/category/' + l.substring(l.lastIndexOf('/') + 1);
             if (l.indexOf('/ontology') > -1 && l.indexOf('?') == -1)
                 subject = 'http://fkg.iust.ac.ir/ontology/' + l.substring(l.lastIndexOf('/') + 1);
@@ -298,7 +298,7 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                                     .success(function (tr) {
                                         $scope.data.clazzTitle = clazzRow ? tr.faLabel : '***';
                                     })
-                                    .error(function(){
+                                    .error(function () {
                                         $scope.data.clazzTitle = clazz;
                                     });
                             }
@@ -313,7 +313,6 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
 
                 });
         }
-
 
 
         // RestService.tripleBySubject(subject)
