@@ -43,6 +43,13 @@ app.filter('index', function () {
     };
 });
 
+app.filter('persianNumbers', function () {
+    return function (str) {
+        return str ? str.toString().numbersToPersian() : undefined;
+    };
+});
+
+
 var OUC = {
     isEmpty: function (obj) {
         return obj == undefined || obj == null;

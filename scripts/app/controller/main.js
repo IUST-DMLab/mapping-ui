@@ -189,7 +189,9 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
     function go() {
 
         function PredicateSort(a, b) {
-            return a.name > b.name;
+            if(a.name > b.name) return 1;
+            if(a.name < b.name) return -1;
+            return 0;
         }
 
         var subject = getParameterByName('subject');
@@ -206,15 +208,16 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
 
         if (subject.indexOf('/ontology/') !== -1) {
             function compare(a, b) {
-                if (a.predicate < b.predicate)
-                    return -1;
-                if (a.predicate > b.predicate)
-                    return 1;
+                if (a.predicate > b.predicate) return 1;
+                if (a.predicate < b.predicate) return -1;
                 return 0;
             }
 
             function LangSort(a, b) {
-                return a.object.lang < b.object.lang;
+                if (a.object.lang > b.object.lang) return 1;
+                if (a.object.lang < b.object.lang) return -1;
+                return 0;
+                //return a.object.lang < b.object.lang;
             }
 
             RestService.ontologyBySubject(subject)
