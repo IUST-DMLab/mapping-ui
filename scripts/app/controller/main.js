@@ -282,6 +282,10 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                     let pageTitle = titleTriple ? (titleTriple[0] ? titleTriple[0].value : undefined) : undefined;
                     $scope.data.pageTitle = pageTitle || '***';
 
+                    let picTriple = data.triples['http://fkg.iust.ac.ir/ontology/picture'];
+                    let pagePic = picTriple ? (picTriple[0] ? picTriple[0].value : undefined) : undefined;
+                    $scope.data.pagePic = pagePic || undefined;
+
                     // let typeRows = data.data.filter(i => i.predicate.indexOf('#type') !== -1);
                     let typeRows = data.triples['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'];
                     if (typeRows.length) {
