@@ -200,13 +200,15 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
             var l = decodeURIComponent(window.location.href);
             if (l.indexOf('/resource') > -1 && l.indexOf('?') == -1)
                 subject = 'http://fkg.iust.ac.ir/resource/' + l.substring(l.lastIndexOf('/') + 1);
+	    if (l.indexOf('/category') > -1 && l.indexOf('?') == -1)
+                subject = 'http://fkg.iust.ac.ir/category/' + l.substring(l.lastIndexOf('/') + 1);
             if (l.indexOf('/ontology') > -1 && l.indexOf('?') == -1)
                 subject = 'http://fkg.iust.ac.ir/ontology/' + l.substring(l.lastIndexOf('/') + 1);
             if (l.indexOf('/property') > -1 && l.indexOf('?') == -1)
                 subject = 'http://fkg.iust.ac.ir/property/' + l.substring(l.lastIndexOf('/') + 1);
         }
 
-        if (subject.indexOf('/ontology/') !== -1) {
+        if (subject.indexOf('/ontology/') !== -1 || subject.indexOf('/property') !== -1) {
             function compare(a, b) {
                 if (a.predicate > b.predicate) return 1;
                 if (a.predicate < b.predicate) return -1;
