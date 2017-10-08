@@ -80,14 +80,14 @@
         <tbody>
         <tr ng-repeat='item in data.items' class="line">
             <td>{{($index)+1 | persianNumbers}}</td>
-            <td class="rtl">
+            <td class="rtl" style="vertical-align: top; padding-top: 5px;">
                 <a href="{{item.predicate}}" rel="noreferrer">{{item.predicate | mapPrefix}}</a>
             </td>
             <td class="rtl">
                 <div ng-repeat="v in item.triples" class="property">
-                    <table cellpadding="2" cellspacing="2" class="simple">
+                    <table cellpadding="2" cellspacing="2" class="simple" style="width: 100%;">
                         <tr>
-                            <td style="vertical-align: top;">
+                            <td style="vertical-align: top; width: 20px;">
                                 <span class="fa smaller-text fa-circle" style="margin-left:5px;"></span>
                             </td>
                             <td style="max-width: 30%;vertical-align: top; text-align: justify;">
@@ -102,14 +102,13 @@
                                          ng-src="{{v.value}}" style="max-width: 120px; max-height: 120px;"/>
                                 </div>
                                 <br>
-                                <div ng-repeat="(p, pp) in v.properties" style="margin-right: 20px;">
-                                    <table>
-                                        <td>
-                                            <!--<span style="margin-left: 10px;">{{p | mapPrefix}}</span>-->
+                                <div ng-repeat="(p, pp) in v.properties" style="margin-right: 20px; width: 100%;">
+                                    <table style="width: 100%;">
+                                        <td style="width: 30%;">
                                             <a href="{{p}}" rel="noreferrer" style="margin-left: 10px;">{{p |
                                                 mapPrefix}}</a>
                                         </td>
-                                        <td>
+                                        <td style="width: auto;">
                                             <table cellpadding="2" cellspacing="2" class="simple">
                                                 <tr>
                                                     <td style="vertical-align: top;">
