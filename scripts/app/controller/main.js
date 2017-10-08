@@ -288,7 +288,7 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
 
                     // let typeRows = data.data.filter(i => i.predicate.indexOf('#type') !== -1);
                     let typeRows = data.triples['http://www.w3.org/1999/02/22-rdf-syntax-ns#type'];
-                    if (typeRows.length) {
+                    if (typeRows && typeRows.length) {
                         let N = typeRows.filter(v => v.value.endsWith('owl#NamedIndividual'))[0];
                         let C = typeRows.filter(v => v.value.endsWith('owl#Class'))[0];
                         let P = typeRows.filter(v => v.value.endsWith('owl#ObjectProperty'))[0];

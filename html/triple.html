@@ -3,6 +3,9 @@
 
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="cache-control" content="no-cache"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="-1"/>
 
     <title>Knowledge Graph - Triple UI</title>
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
@@ -20,8 +23,6 @@
     <script type="text/javascript" src="../node_modules/ng-tags-input/build/ng-tags-input.min.js"></script>
     <link rel="stylesheet" type="text/css" href="../node_modules/ng-tags-input/build/ng-tags-input.min.css">
 
-    <!--<script type="text/javascript" src="../node_modules/underscore/underscore.js"></script>-->
-
     <script type="text/javascript" src="../node_modules/angular-auto-complete/angular-auto-complete.js"></script>
     <link rel="stylesheet" href="../node_modules/angular-auto-complete/angular-auto-complete.css"/>
 
@@ -36,6 +37,7 @@
     <script type="text/javascript" src="../scripts/general.js?v=13960715B"></script>
 
     <script type="text/javascript" src="../scripts/app/app.js?v=13960715B"></script>
+    <script type="text/javascript" src="../scripts/app/config.js?v=13960715B"></script>
     <script type="text/javascript" src="../scripts/app/service/rest.js?v=13960715B"></script>
     <script type="text/javascript" src="../scripts/app/controller/main.js?v=13960715B"></script>
 
@@ -88,7 +90,7 @@
                             <td style="vertical-align: top;">
                                 <span class="fa smaller-text fa-circle" style="margin-left:5px;"></span>
                             </td>
-                            <td style="max-width: 30%;vertical-align: top;">
+                            <td style="max-width: 30%;vertical-align: top; text-align: justify;">
                                 <span ng-if="v.type!='Resource'" style="max-width: 30%;">
                                     {{v.value}}
                                     <span ng-if="v.lang" class="small-text text-nowrap">({{v.lang}})</span>

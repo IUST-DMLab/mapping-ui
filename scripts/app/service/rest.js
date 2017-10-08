@@ -1,11 +1,9 @@
 app.service('RestService', ['$http', function ($http) {
-    //var baseURl = 'http://localhost:8090/';
-    var baseURl = 'http://194.225.227.161:8090/';
     var self = this;
     this.ingoing = 0;
 
     self.init = function (rootAddress) {
-        baseURl = rootAddress;
+        baseURL = rootAddress;
     };
 
     function handelError(error) {
@@ -34,14 +32,16 @@ app.service('RestService', ['$http', function ($http) {
         return $http.post(url, data).error(handelError).success(handelSuccess);
     }
 
+    /**************************************************/
+
     this.addMultipleTagToDisk = function (data) {
-        return post(baseURl + 'rest/tags/addMultiple', data);
+        return post(baseURL + 'rest/tags/addMultiple', data);
     };
 
     this.translationRoot = function () {
         var req = {
             method: 'GET',
-            url: baseURl + 'translator/rest/v1/root',
+            url: baseURL + 'translator/rest/v1/root',
             params: {}
         };
         return http(req);
@@ -50,7 +50,7 @@ app.service('RestService', ['$http', function ($http) {
     this.translationSearch = function (page, pageSize, name, like, approved, hasFarsi) {
         var req = {
             method: 'GET',
-            url: baseURl + 'translator/rest/v1/search',
+            url: baseURL + 'translator/rest/v1/search',
             params: {
                 page: page,
                 pageSize: pageSize
@@ -66,7 +66,7 @@ app.service('RestService', ['$http', function ($http) {
     this.translationTranslate = function (name, faLabel, faOtherLabels, note, approved) {
         var req = {
             method: 'GET',
-            url: baseURl + 'translator/rest/v1/translate',
+            url: baseURL + 'translator/rest/v1/translate',
             params: {
                 name: name,
                 faLabel: OUC.isEmpty(faLabel) ? "" : faLabel,
@@ -81,7 +81,7 @@ app.service('RestService', ['$http', function ($http) {
     this.translate = function (keyword) {
         var req = {
             method: 'GET',
-            url: baseURl + 'translator/rest/v1/node/' + keyword
+            url: baseURL + 'translator/rest/v1/node/' + keyword
         };
         return http(req);
     };
@@ -89,7 +89,7 @@ app.service('RestService', ['$http', function ($http) {
     this.getPrefixes = function () {
         var req = {
             method: 'GET',
-            url: 'http://194.225.227.161:8090/mapping/rest/v1/prefixes'
+            url: baseURL + 'mapping/rest/v1/prefixes'
         };
 
         return http(req);
@@ -100,7 +100,7 @@ app.service('RestService', ['$http', function ($http) {
     this.ontologyClassSearch = function (page, pageSize, keyword) {
         var req = {
             method: 'GET',
-            url: baseURl + '/templateMapping/rest/v1/searchOntologyClass',
+            url: baseURL + 'templateMapping/rest/v1/searchOntologyClass',
             params: {
                 page: page,
                 pageSize: pageSize,
@@ -115,7 +115,7 @@ app.service('RestService', ['$http', function ($http) {
     this.ontologyBySubject = function (subject) {
         var req = {
             method: 'GET',
-            url: 'http://dmls.iust.ac.ir:8091/rs/v2/ontology/search',
+            url: xxxURL + 'rs/v2/ontology/search',
             params: {
                 subject: subject || ''
             }
@@ -126,7 +126,7 @@ app.service('RestService', ['$http', function ($http) {
     this.templateMappingSearch = function (page, pageSize, templateName, className, like, approved) {
         var req = {
             method: 'GET',
-            url: baseURl + 'templateMapping/rest/v1/search',
+            url: baseURL + 'templateMapping/rest/v1/search',
             params: {
                 page: page,
                 pageSize: pageSize
@@ -142,7 +142,7 @@ app.service('RestService', ['$http', function ($http) {
     this.templateMappingSave = function (item) {
         var req = {
             method: 'GET',
-            url: baseURl + 'templateMapping/rest/v1/editByGet',
+            url: baseURL + 'templateMapping/rest/v1/editByGet',
             params: {
                 id: item.id,
                 approved: OUC.isEmpty(item.approved) ? false : item.approved,
@@ -155,13 +155,12 @@ app.service('RestService', ['$http', function ($http) {
     };
 
 
-
     /* Property Mapping */
 
     this.ontologyPropertyNameSearch = function (page, pageSize, keyword) {
         var req = {
             method: 'GET',
-            url: baseURl + '/mapping/rest/v1/searchOntologyPropertyName',
+            url: baseURL + 'mapping/rest/v1/searchOntologyPropertyName',
             params: {
                 page: page,
                 pageSize: pageSize,
@@ -177,7 +176,7 @@ app.service('RestService', ['$http', function ($http) {
 
         var req = {
             method: 'GET',
-            url: baseURl + 'mapping/rest/v1/search',
+            url: baseURL + 'mapping/rest/v1/search',
             params: {
                 page: page,
                 pageSize: pageSize
@@ -199,7 +198,7 @@ app.service('RestService', ['$http', function ($http) {
     this.propertyMappingSave = function (item) {
         var req = {
             method: 'GET',
-            url: baseURl + 'mapping/rest/v1/editByGet',
+            url: baseURL + 'mapping/rest/v1/editByGet',
             params: {
                 id: item.id,
                 approved: OUC.isEmpty(item.approved) ? false : item.approved,
@@ -219,7 +218,7 @@ app.service('RestService', ['$http', function ($http) {
     this.triplesSearch = function (page, pageSize, context, subject, predicate, object) {
         var req = {
             method: 'GET',
-            url: 'http://194.225.227.161:8091/rs/v1/triples/search?predicate=http://www.w3.org/2000/01/rdf-schema%23label',
+            url: xxxURL + 'rs/v1/triples/search?predicate=http://www.w3.org/2000/01/rdf-schema%23label',
             params: {
                 page: page,
                 pageSize: pageSize
@@ -234,7 +233,7 @@ app.service('RestService', ['$http', function ($http) {
     this.tripleBySubject = function (subject) {
         var req = {
             method: 'GET',
-            url: 'http://194.225.227.161:8091/rs/v1/triples/search',
+            url: xxxURL + 'rs/v1/triples/search',
             params: {
                 subject: subject
             }
@@ -246,7 +245,7 @@ app.service('RestService', ['$http', function ($http) {
     this.tripleBySubject2 = function (subject) {
         var req = {
             method: 'GET',
-            url: 'http://dmls.iust.ac.ir:8091/rs/v2/subjects/get',
+            url: xxxURL + 'rs/v2/subjects/get',
             params: {
                 subject: subject
             }
@@ -258,12 +257,12 @@ app.service('RestService', ['$http', function ($http) {
     // mappings
 
     this.getMappings = function (page, pageSize) {
-        var url = 'http://194.225.227.161:8091/rs/v1/mappings/all?page=' + page + '&pageSize=' + pageSize;
+        var url = xxxURL + 'rs/v1/mappings/all?page=' + page + '&pageSize=' + pageSize;
         return post(url, {});
     };
 
     this.saveMappings = function (object) {
-        var url = 'http://194.225.227.161:8091/rs/v1/mappings/template/insert';
+        var url = xxxURL + 'rs/v1/mappings/template/insert';
         var data = object;
         return post(url, data);
     };
@@ -271,7 +270,7 @@ app.service('RestService', ['$http', function ($http) {
     this.predicatesSearch = function (keyword) {
         var req = {
             method: 'GET',
-            url: 'http://194.225.227.161:8091/rs/v1/mappings/experts/predicates',
+            url: xxxURL + 'rs/v1/mappings/experts/predicates',
             params: {
                 keyword: keyword
             }
