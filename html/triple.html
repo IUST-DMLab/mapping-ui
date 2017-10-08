@@ -104,6 +104,9 @@
                                 <br>
                                 <div ng-repeat="(p, pp) in v.properties" style="margin-right: 20px; width: 100%;">
                                     <table style="width: 100%;">
+                                        <td style="vertical-align: top; width: 20px;">
+                                            <span class="fa small-text fa-minus" style="margin-left:5px;"></span>
+                                        </td>
                                         <td style="width: 30%;">
                                             <a href="{{p}}" rel="noreferrer" style="margin-left: 10px;">{{p |
                                                 mapPrefix}}</a>
@@ -112,8 +115,7 @@
                                             <table cellpadding="2" cellspacing="2" class="simple">
                                                 <tr>
                                                     <td style="vertical-align: top;">
-                                                        <span class="fa smaller-text fa-circle"
-                                                              style="margin-left:5px;"></span>
+                                                        <span class="fa small-text fa-minus" style="margin-left:5px;"></span>
                                                     </td>
                                                     <td ng-if="pp.type!='Resource'" style="max-width: 30%;">
                                                         <span>{{pp.value}}</span>
