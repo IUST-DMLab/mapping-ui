@@ -254,9 +254,9 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
 
                     let types = data.data .filter(i => i.predicate === 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
                     console.log(types);
-                    let K = types.filter(t => t.object.value.endsWith('skos#Concept'))[0];
+                    let K = types.filter(t => t.object.value.endsWith('skos/core#'))[0];
                     let C = types.filter(t => t.object.value.endsWith('owl#Class'))[0];
-                    let P = types.filter(t => t.object.value.endsWith('rdf#Property'))[0];
+                    let P = types.filter(t => t.object.value.endsWith('22-rdf-syntax-ns#Property'))[0];
 
                     let subTitle = '';
                     if(K) subTitle = 'دسته‌بندی';
