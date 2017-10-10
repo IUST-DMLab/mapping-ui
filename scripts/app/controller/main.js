@@ -216,8 +216,8 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
             }
 
             function LangSort(a, b) {
-                if (a.object.lang > b.object.lang) return 1;
-                if (a.object.lang < b.object.lang) return -1;
+                if (a.object.lang > b.object.lang) return -1;
+                if (a.object.lang < b.object.lang) return 1;
                 return 0;
                 //return a.object.lang < b.object.lang;
             }
@@ -250,11 +250,23 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                     //console.log(groups);
 
                     let titles = data.data.filter(i => i.predicate === 'http://www.w3.org/2000/01/rdf-schema#label').sort(LangSort);
-                    let pageTitle = titles.map(i => i.object.value).join(' - ');
+                    let pageTitle = titles.length ? titles[0].object.value : '';
+
+                    let types = data.data .filter(i => i.predicate === 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
+                    console.log(types);
+                    let K = types.filter(t => t.object.value.endsWith('skos#Concept'))[0];
+                    let C = types.filter(t => t.object.value.endsWith('owl#Class'))[0];
+                    let P = types.filter(t => t.object.value.endsWith('rdf#Property'))[0];
+
+                    let subTitle = '';
+                    if(K) subTitle = 'دسته‌بندی';
+                    if(C) subTitle = 'کلاس هستان‌شناسی';
+                    if(P) subTitle = 'خصیصه';
 
                     $scope.data = {
                         ontologies: groups,
-                        pageTitle: pageTitle
+                        pageTitle: pageTitle,
+                        subTitle : subTitle
                     };
                 });
         }
@@ -300,18 +312,18 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                                 clazz = clazz.split('/').pop();
                                 RestService.translate(clazz)
                                     .success(function (tr) {
-                                        $scope.data.clazzTitle = clazzRow ? tr.faLabel : '***';
+                                        $scope.data.subTitle = clazzRow ? tr.faLabel : '***';
                                     })
                                     .error(function () {
-                                        $scope.data.clazzTitle = clazz;
+                                        $scope.data.subTitle = clazz;
                                     });
                             }
                         }
                         else if (C) {
-                            $scope.data.clazzTitle = 'کلاس هستان‌شناسی';
+                            $scope.data.subTitle = 'کلاس هستان‌شناسی';
                         }
                         else if (P) {
-                            $scope.data.clazzTitle = 'خصیصه هستان‌شناسی';
+                            $scope.data.subTitle = 'خصیصه هستان‌شناسی';
                         }
                     }
 
