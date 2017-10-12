@@ -155,6 +155,45 @@ table.simple {
   z-index: 2200;
 }
 
+.tabs {
+  direction: rtl;
+  .tab {
+    color: gray;
+    cursor: pointer;
+    display: inline-block;
+
+
+    &.active {
+      border:solid 1px #dddddd;
+      border-bottom:none;
+      color: black;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    .tab-inner {
+      display: block;
+      padding: 10px;
+    }
+
+  }
+}
+
+.panels {
+
+  border:solid 1px #dddddd;
+
+  .panel {
+    display: none;
+
+    &.active {
+      display: block !important;
+    }
+  }
+}
+
 /**/
 
 #header {

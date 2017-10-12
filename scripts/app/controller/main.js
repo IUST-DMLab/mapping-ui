@@ -185,14 +185,29 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
         go(0);
     }, 500);
 
+
+    function PredicateSort(a, b) {
+        if (a.name > b.name) return 1;
+        if (a.name < b.name) return -1;
+        return 0;
+    }
+
+    function compare(a, b) {
+        if (a.predicate > b.predicate) return 1;
+        if (a.predicate < b.predicate) return -1;
+        return 0;
+    }
+
+    function LangSort(a, b) {
+        if (a.object.lang > b.object.lang) return -1;
+        if (a.object.lang < b.object.lang) return 1;
+        return 0;
+        //return a.object.lang < b.object.lang;
+    }
+
+
     // http://localhost:63342/mapping-ui/html/triple.html?subject=http://fkg.iust.ac.ir/resource/%D8%AD%D8%B3%D9%86_%D8%B1%D9%88%D8%AD%D8%A7%D9%86%DB%8C
     function go() {
-
-        function PredicateSort(a, b) {
-            if (a.name > b.name) return 1;
-            if (a.name < b.name) return -1;
-            return 0;
-        }
 
         var subject = getParameterByName('subject');
         //handle http://dmls.iust.ac.ir/resource/sth (no parameters)
@@ -209,18 +224,6 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
         }
 
         if (subject.indexOf('/ontology/') !== -1 || subject.indexOf('/property') !== -1) {
-            function compare(a, b) {
-                if (a.predicate > b.predicate) return 1;
-                if (a.predicate < b.predicate) return -1;
-                return 0;
-            }
-
-            function LangSort(a, b) {
-                if (a.object.lang > b.object.lang) return -1;
-                if (a.object.lang < b.object.lang) return 1;
-                return 0;
-                //return a.object.lang < b.object.lang;
-            }
 
             RestService.ontologyBySubject(subject)
                 .success(function (data) {
@@ -252,21 +255,21 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                     let titles = data.data.filter(i => i.predicate === 'http://www.w3.org/2000/01/rdf-schema#label').sort(LangSort);
                     let pageTitle = titles.length ? titles[0].object.value : '';
 
-                    let types = data.data .filter(i => i.predicate === 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
-                    console.log(types);
+                    let types = data.data.filter(i => i.predicate === 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
+                    //console.log(types);
                     let K = types.filter(t => t.object.value.endsWith('skos/core#'))[0];
                     let C = types.filter(t => t.object.value.endsWith('owl#Class'))[0];
                     let P = types.filter(t => t.object.value.endsWith('22-rdf-syntax-ns#Property'))[0];
 
                     let subTitle = '';
-                    if(K) subTitle = 'دسته‌بندی';
-                    if(C) subTitle = 'کلاس هستان‌شناسی';
-                    if(P) subTitle = 'خصیصه';
+                    if (K) subTitle = 'دسته‌بندی';
+                    if (C) subTitle = 'کلاس هستان‌شناسی';
+                    if (P) subTitle = 'خصیصه';
 
                     $scope.data = {
                         ontologies: groups,
                         pageTitle: pageTitle,
-                        subTitle : subTitle
+                        subTitle: subTitle
                     };
                 });
         }
@@ -330,6 +333,12 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                 });
         }
 
+
+        RestService.triplesOfSubject(subject)
+            .success(function (data) {
+                $scope._virtuoso = data;
+                $scope.virtuoso = _.groupBy(data.sort(compare), 'predicate');
+            });
 
         // RestService.tripleBySubject(subject)
         //     .success(function (data) {
@@ -397,6 +406,14 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
         //         }
         //     });
     }
+
+    $scope.activateTab = function (tabId) {
+        $('.tabs .tab').removeClass('active');
+        $('.tabs .tab[data-tabId={0}]'.format(tabId)).addClass('active');
+
+        $('.panels .panel').removeClass('active');
+        $('.panels .panel[data-tabId={0}]'.format(tabId)).addClass('active');
+    };
 
 });
 

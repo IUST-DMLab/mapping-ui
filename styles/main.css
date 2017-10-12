@@ -191,6 +191,35 @@ table.simple tr.line {
   box-shadow: 0 0 20px 2px #555;
   z-index: 2200;
 }
+.tabs {
+  direction: rtl;
+}
+.tabs .tab {
+  color: gray;
+  cursor: pointer;
+  display: inline-block;
+}
+.tabs .tab.active {
+  border: solid 1px #dddddd;
+  border-bottom: none;
+  color: black;
+}
+.tabs .tab:hover {
+  text-decoration: underline;
+}
+.tabs .tab .tab-inner {
+  display: block;
+  padding: 10px;
+}
+.panels {
+  border: solid 1px #dddddd;
+}
+.panels .panel {
+  display: none;
+}
+.panels .panel.active {
+  display: block !important;
+}
 /**/
 #header {
   direction: rtl;

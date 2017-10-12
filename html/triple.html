@@ -33,6 +33,10 @@
     <script type="text/javascript" src="../node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
     <script type="text/javascript" src="../node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
 
+    <script type="text/javascript" src="../node_modules/lodash/lodash.min.js"></script>
+
+    <!---->
+
     <script type="text/javascript" src="../scripts/date.js?v=13960718A"></script>
     <script type="text/javascript" src="../scripts/general.js?v=13960718A"></script>
 
@@ -59,136 +63,37 @@
             </h4>
         </div>
         <div class="col-xs-12 col-md-2">
-            <div style="margin: 4px;">
+            <div ng-if="data.pagePic" style="margin: 4px;">
                 <img ng-src="{{data.pagePic}}"
                      style="max-width: 200px; max-height: 200px;"
                      onerror="$(this).hide();"/>
             </div>
         </div>
     </div>
-
     <br>
-    <table ng-if="data.items" class="simple" style="width: 100%;">
-        <thead>
-        <tr>
-            <th style="width: 80px;">#</th>
-            <th style="">خصیصه</th>
-            <th style="">مقدار</th>
-            <th style="width: 120px;" class="left">ماژول استخراج</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat='item in data.items' class="line">
-            <td>{{($index)+1 | persianNumbers}}</td>
-            <td class="rtl" style="vertical-align: top; padding-top: 5px;">
-                <a href="{{item.predicate}}" rel="noreferrer">{{item.predicate | mapPrefix}}</a>
-            </td>
-            <td class="rtl">
-                <div ng-repeat="v in item.triples" class="property">
-                    <table cellpadding="2" cellspacing="2" class="simple" style="width: 100%;">
-                        <tr>
-                            <td style="vertical-align: top; width: 20px;">
-                                <span class="fa smaller-text fa-circle" style="margin-left:5px;"></span>
-                            </td>
-                            <td style="max-width: 30%;vertical-align: top; text-align: justify;">
-                                <span ng-if="v.type!='Resource'" style="max-width: 30%;">
-                                    {{v.value}}
-                                    <span ng-if="v.lang" class="small-text text-nowrap">({{v.lang}})</span>
-                                </span>
-                                <div ng-if="v.type=='Resource'" style="display: inline-block">
-                                    <a ng-if="v.value.indexOf('upload.wikimedia.org')===-1"
-                                       ng-href="{{v.value}}" rel="noreferrer">{{v.value | mapPrefix}}</a>
-                                    <img ng-if="v.value.indexOf('upload.wikimedia.org')!==-1"
-                                         ng-src="{{v.value}}" style="max-width: 120px; max-height: 120px;"/>
-                                </div>
-                                <br>
-                                <div ng-repeat="(p, pp) in v.properties" style="margin-right: 20px; width: 100%;">
-                                    <table style="width: 100%;">
-                                        <td style="vertical-align: top; width: 20px;">
-                                            <span class="fa small-text fa-minus" style="margin-left:5px;"></span>
-                                        </td>
-                                        <td style="width: 30%;">
-                                            <a href="{{p}}" rel="noreferrer" style="margin-left: 10px;">{{p |
-                                                mapPrefix}}</a>
-                                        </td>
-                                        <td style="width: auto;">
-                                            <table cellpadding="2" cellspacing="2" class="simple">
-                                                <tr>
-                                                    <td style="vertical-align: top;">
-                                                        <span class="fa small-text fa-minus" style="margin-left:5px;"></span>
-                                                    </td>
-                                                    <td ng-if="pp.type!='Resource'" style="max-width: 30%;">
-                                                        <span>{{pp.value}}</span>
-                                                        <span ng-if="pp.lang" class="small-text text-nowrap">({{pp.lang}})</span>
-                                                    </td>
-                                                    <td ng-if="pp.type=='Resource'"
-                                                        style="max-width: 30%;vertical-align: top;">
-                                                        <a ng-if="pp.value.indexOf('upload.wikimedia.org')===-1"
-                                                           ng-href="{{pp.value}}" rel="noreferrer">{{pp.value |
-                                                            mapPrefix}}</a>
-                                                        <img ng-if="pp.value.indexOf('upload.wikimedia.org')!==-1"
-                                                             ng-src="{{pp.value}}"
-                                                             style="max-width: 120px; max-height: 120px;"/>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </table>
 
-                                </div>
-                            </td>
-                            <td style="vertical-align: top;">
+    <div class="tabs">
+        <span data-tabId="0" class="tab active" ng-click="activateTab(0)">
+            <span class="tab-inner">triples</span>
+        </span>
+        <span data-tabId="1" class="tab" ng-click="activateTab(1)">
+            <span class="tab-inner">triples by virtuoso</span>
+        </span>
+    </div>
 
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </td>
-            <td class="ltr left">
-                <div ng-repeat="v in item.triples">{{v.source.module}}</div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="panels">
+        <div data-tabId="0" class="panel active">
+            <!--  Resource  -->
+            <div ng-include="'templates/triple-resource.html'"></div>
 
-
-    <table ng-if="data.ontologies" class="simple" style="width: 100%;">
-        <thead>
-        <tr>
-            <th style="width: 80px;">#</th>
-            <th style="">گزاره</th>
-            <th style="">مقدار</th>
-            <!--<th style="width: 120px;" class="left">ماژول استخراج</th>-->
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat='ontology in data.ontologies' class="line">
-            <td>{{($index)+1}}</td>
-            <td class="rtl">
-                <a href="{{ontology.item.predicate}}">{{ontology.item.predicate | mapPrefix}}</a>
-            </td>
-            <td class="rtl">
-
-                <table cellpadding="2" cellspacing="2" class="simple">
-                    <tr ng-repeat='value in ontology.values'>
-                        <td ng-class="value.object.lang==='en' ? 'ltr' : ''">
-                            <span ng-if="value.object.lang!=='fa'" class="small-text text-nowrap">({{value.object.lang}})</span>
-                            <a ng-if="value.object.type==='Resource'" href="{{value.object.value}}" rel="noreferrer">{{value.object.value
-                                | mapPrefix}}</a>
-                            <span ng-if="value.object.type==='String'">{{value.object.value}}</span>
-                            <span ng-if="value.object.lang==='fa'" class="small-text text-nowrap">({{value.object.lang}})</span>
-                        </td>
-                        <td>
-
-                        </td>
-                    </tr>
-                </table>
-            </td>
-            <!--<td class="ltr left"></td>-->
-        </tr>
-        </tbody>
-    </table>
-
+            <!--  Ontology  -->
+            <div ng-include="'templates/triple-ontology.html'"></div>
+        </div>
+        <div data-tabId="1" class="panel">
+            <!--  Virtuoso  -->
+            <div ng-include="'templates/triple-virtuoso.html'"></div>
+        </div>
+    </div>
 </div>
 
 <!--<div ng-include="'templates/footer.html'"></div>-->

@@ -254,6 +254,19 @@ app.service('RestService', ['$http', function ($http) {
         return http(req);
     };
 
+    //  http://dmls.iust.ac.ir:8090/virtuoso/rest/v1/getTriplesOfSubject?subjectUrl=http://fkg.iust.ac.ir/ontology/Capital
+    this.triplesOfSubject = function (subject) {
+        var req = {
+            method: 'GET',
+            url: baseURL + 'virtuoso/rest/v1/getTriplesOfSubject',
+            params: {
+                subjectUrl: subject
+            }
+        };
+
+        return http(req);
+    };
+
     // mappings
 
     this.getMappings = function (page, pageSize) {
