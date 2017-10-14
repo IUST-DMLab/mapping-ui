@@ -228,6 +228,8 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
             RestService.ontologyBySubject(subject)
                 .success(function (data) {
 
+                    //if(!data || !data.data) return;
+
                     let list = angular.copy(data.data).sort(compare);
                     //console.log(list.map(x=>x.predicate));
                     let groups = [];
@@ -276,6 +278,8 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
         else /*if (subject.indexOf('/resource/') !== -1)*/ {
             RestService.tripleBySubject2(subject)
                 .success(function (data) {
+
+                    // if(!data) return;
 
                     let _triples = [];
                     let d2 = angular.copy(data);

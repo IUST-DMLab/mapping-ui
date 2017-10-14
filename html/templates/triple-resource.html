@@ -21,17 +21,27 @@
                             <span class="fa smaller-text fa-circle" style="margin-left:5px;"></span>
                         </td>
                         <td style="max-width: 30%;vertical-align: top; text-align: justify;">
-                                <span ng-if="v.type!='Resource'" style="max-width: 30%;">
-                                    {{v.value}}
-                                    <span ng-if="v.lang" class="small-text text-nowrap">({{v.lang}})</span>
-                                </span>
+                            <div ng-if="v.type!='Resource'"
+                                 class="right"
+                                 ng-class="v.lang==='en' ? 'ltr' : ''">
+
+                                <span ng-if="v.lang==='en'" class="small-text text-nowrap">({{v.lang}})</span>
+                                <span>{{v.value}}</span>
+                                <span ng-if="v.lang==='fa'" class="small-text text-nowrap">({{v.lang}})</span>
+
+                            </div>
+                            <!--  <span ng-if="v.type!='Resource'" style="max-width: 30%;">
+                                {{v.value}}
+                                <span ng-if="v.lang" class="small-text text-nowrap">({{v.lang}})</span>
+                            </span>  -->
+
                             <div ng-if="v.type=='Resource'" style="display: inline-block">
                                 <a ng-if="v.value.indexOf('upload.wikimedia.org')===-1"
                                    ng-href="{{v.value}}" rel="noreferrer">{{v.value | mapPrefix}}</a>
                                 <img ng-if="v.value.indexOf('upload.wikimedia.org')!==-1"
                                      ng-src="{{v.value}}" style="max-width: 120px; max-height: 120px;"/>
                             </div>
-                            <br>
+
                             <div ng-repeat="(p, pp) in v.properties" style="margin-right: 20px; width: 100%;">
                                 <table style="width: 100%;">
                                     <td style="vertical-align: top; width: 20px;">
@@ -45,11 +55,18 @@
                                         <table cellpadding="2" cellspacing="2" class="simple">
                                             <tr>
                                                 <td style="vertical-align: top;">
-                                                    <span class="fa small-text fa-minus" style="margin-left:5px;"></span>
+                                                    <span class="fa small-text fa-minus"
+                                                          style="margin-left:5px;"></span>
                                                 </td>
-                                                <td ng-if="pp.type!='Resource'" style="max-width: 30%;">
+                                                <td ng-if="pp.type!='Resource'"
+                                                    class="right"
+                                                    ng-class="v.lang==='en' ? 'ltr' : ''"
+                                                    style="max-width: 30%;">
+
+                                                    <span ng-if="pp.lang==='en'" class="small-text text-nowrap">({{pp.lang}})</span>
                                                     <span>{{pp.value}}</span>
-                                                    <span ng-if="pp.lang" class="small-text text-nowrap">({{pp.lang}})</span>
+                                                    <span ng-if="pp.lang==='fa'" class="small-text text-nowrap">({{pp.lang}})</span>
+
                                                 </td>
                                                 <td ng-if="pp.type=='Resource'"
                                                     style="max-width: 30%;vertical-align: top;">
@@ -66,9 +83,6 @@
                                 </table>
 
                             </div>
-                        </td>
-                        <td style="vertical-align: top;">
-
                         </td>
                     </tr>
                 </table>
