@@ -5,6 +5,9 @@
         <th style="width: 30%;">خصیصه</th>
         <th style="width: 60%;">مقدار</th>
         <th style="width: 5%; white-space: nowrap" class="left">ماژول استخراج</th>
+        <th style="width: 5%; white-space: nowrap" class="left">
+            <span style="padding: 0 10px 0 0;">ورژن</span>
+        </th>
     </tr>
     </thead>
     <tbody>
@@ -90,6 +93,9 @@
         </td>
         <td class="ltr left">
             <div ng-repeat="v in item.triples">{{v.source.module}}</div>
+        </td>
+        <td class="ltr left">
+            <div ng-repeat="v in item.triples">{{v.source.version | persianNumbers}}</div>
         </td>
     </tr>
     </tbody>
