@@ -209,7 +209,7 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
     // http://localhost:63342/mapping-ui/html/triple.html?subject=http://fkg.iust.ac.ir/resource/%D8%AD%D8%B3%D9%86_%D8%B1%D9%88%D8%AD%D8%A7%D9%86%DB%8C
     function go() {
 
-        var subject = getParameterByName('subject');
+        let subject = getParameterByName('subject');
         //handle http://dmls.iust.ac.ir/resource/sth (no parameters)
         if (subject == null) {
             var l = decodeURIComponent(window.location.href);
@@ -331,6 +331,10 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                         }
                         else if (P) {
                             $scope.data.subTitle = 'خصیصه هستان‌شناسی';
+                        }
+
+                        if (data.subject.indexOf('/category') > -1) {
+                            $scope.data.subTitle = 'رده';
                         }
                     }
 
