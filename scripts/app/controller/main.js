@@ -266,7 +266,7 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                     let subTitle = '';
                     if (K) subTitle = 'دسته‌بندی';
                     if (C) subTitle = 'کلاس هستان‌شناسی';
-                    if (P) subTitle = 'خصیصه';
+                    if (P) subTitle = 'خصیصه هستان‌شناسی';
 
                     $scope.data = {
                         ontologies: groups,
