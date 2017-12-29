@@ -295,6 +295,12 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                     // d2.triples = undefined;
                     d2.items = _triples.sort(PredicateSort);
 
+                    for (let ii = 0; ii < d2.items.length; ii++) {
+                        let item = d2.items[ii];
+                        item.triples.map(t => t.__rawText = (t.source && t.source.parameters && t.source.parameters['rawText']) ? t.source.parameters['rawText'] : '')
+                        // console.log(item);
+                    }
+
                     $scope.data = d2;
 
                     let titleTriple = data.triples['http://www.w3.org/2000/01/rdf-schema#label'];
@@ -337,6 +343,8 @@ app.controller('TripleController', function ($scope, $timeout, RestService) {
                             $scope.data.subTitle = 'رده';
                         }
                     }
+
+
 
                 });
         }
