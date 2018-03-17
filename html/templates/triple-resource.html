@@ -28,9 +28,10 @@
                                  class="right"
                                  ng-class="v.lang==='en' ? 'ltr' : ''">
 
-                                <span ng-if="v.lang==='en'" class="small-text text-nowrap">({{v.lang}})</span>
-                                <span>{{v.value}}</span>
-                                <span ng-if="v.lang==='fa'" class="small-text text-nowrap">({{v.lang}})</span>
+                                <span ng-if="v.lang==='en' && v.type==='String'" class="small-text text-nowrap">({{v.lang}})</span>
+                                <span ng-if="v.type!=='Date'">{{v.value}}</span>
+                                <span ng-if="v.type==='Date'">{{v.value | date:'yyyy-MM-dd'}}<br/>epoch:{{v.value}}</span>
+                                <span ng-if="v.lang==='fa' && v.type==='String'" class="small-text text-nowrap">({{v.lang}})</span>
 
                             </div>
                             <!--  <span ng-if="v.type!='Resource'" style="max-width: 30%;">
@@ -66,9 +67,13 @@
                                                     ng-class="v.lang==='en' ? 'ltr' : ''"
                                                     style="max-width: 30%;">
 
-                                                    <span ng-if="pp.lang==='en'" class="small-text text-nowrap">({{pp.lang}})</span>
-                                                    <span>{{pp.value}}</span>
-                                                    <span ng-if="pp.lang==='fa'" class="small-text text-nowrap">({{pp.lang}})</span>
+                                                    <span ng-if="pp.lang==='en' && pp.type==='String'"
+                                                          class="small-text text-nowrap">({{pp.lang}})</span>
+                                                    <span ng-if="pp.type!=='Date'">{{pp.value}}</span>
+                                                    <span ng-if="pp.type==='Date'">{{pp.value | date:'yyyy-MM-dd'}}<br/>epoch:{{pp.value}}</span>
+                                                    <span ng-if="pp.type!=='String'"> ({{pp.type}})</span>
+                                                    <span ng-if="pp.lang==='fa' && pp.type==='String'"
+                                                          class="small-text text-nowrap">({{pp.lang}})</span>
 
                                                 </td>
                                                 <td ng-if="pp.type=='Resource'"
